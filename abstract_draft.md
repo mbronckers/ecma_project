@@ -12,6 +12,10 @@ The estimation of traditional investigation of treatment effect heterogeneity la
 
 As such, Green & Kern suggest the usage of Bayesian Additive Regression Trees (BARTs, see Chipman 2010) as a method for analyzing treatment effect heterogeneity in survey experiments. An important advantage is that BARTs offers the automatic detection and modeling of non-linear relationships and interactions, which prevents researchers from introducing discretion into the data analysis. Moreover, Green & Kern report an insensitivity to tuning parameters, making it an approachable tool for survey experimenters to model systematic treatment effect heterogeneity in a robust manner.
 
+## Literature Review
+
+TODO
+
 ## Extension
 
 Given the recent advances in ML, we want to provide a comprehensive comparison of methods to analyze treatment effect heterogeneity. Though BARTs naturally offer its advantages, they also have their drawbacks. Being a Bayesian MCMC, they are naturally computationally expensive relative to non-bayesian methods and not guaranteed to converge, making them slower and less practical. As such, we want to compare BARTs against a set of alternative methods to assess its place in the repertoire of survey experimenters.
