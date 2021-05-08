@@ -19,12 +19,15 @@ As such, Green and Kern [2012] suggest the usage of Bayesian Additive Regression
 We primarily draw approaches and intuition from three works.
 
 (1) Modeling Heterogenous Treatment Effects in Survey Experiments with Bayesian Additive Regression Trees (Green and Kern [2012])
+
 As aforementioned, we want to extend the work done by Green and Kern in analyzing heterogeneity in treatment effects of survey data that was intended to measure the stigma of the word "welfare" when asking individuals about public spending. We intend to directly compare their results with the results that we obtain from applying Wager and Athey's [2017] Causal Forests method. Their justification for BART's suitability for uncovering heterogeneity in treatment effect is also important in establishing our criteria of comparison - they discuss that BART flourishes in eliminating researcher discretion in choosing their data subgroup formation, detecting and modeling high dimension non-linear relationships and interactions, and minimizing parameter tuning (thereby increasing robustness) so that it works "out of the box".   
 
 (2) Estimation and Inference of Heterogenous Treatment Effects using Random Forests (Wager and Athey [2017])
+
 Causal Forests are an extension of Random Forests and Wager and Athey [2017] make a concerted effort for their extension to have "tractable asymptotic theory", and be useful, unlike most machine learning approaches, for causal inference. They directly criticize BART in being difficult to use for statistical inference, claiming that there is no asymptotic normality theory around the posterior of BART that guarantees "concentration around the true conditional mean function". This is the underlying motivation for our research - we want to focus in on this criticism by direct comparison of BART and Causal Forests using criteria (1) and (2) describe, and offer both quantitative comparison in performance, computational cost, and generated confidence intervals, but also qualitative comparison in statistical inference ability, necessary strength of model assumptions and ease of use.
 
 (3) Machine Learning Methods Economists Should Know About (Athey and Imbens [2019])
+
 This paper serves as a very recent reference point of the current approaches machine learning offers in regards to treatment effect heterogeneity. By summarizing the challenges of estimating treatment effect heterogeneity into three questions main questions, Athey and Imbens [2019] have given us a clearer idea of what to prioritize as criteria when comparing the results of Causal Forest with BART. Furthermore, its mention of Causal Forests pointed us in the direction of even focusing on this extension - BART and Causal Forests are are both tree based approaches that have been studied and described as relatively strong candidates for treatment effect heterogeneity (compared to other approaches), which lead us to believe that such a direct comparison would not only be possible, but important.
 
 ## Focus (as an Extension of Green and Kern)
