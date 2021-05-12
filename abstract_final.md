@@ -8,6 +8,8 @@ Max Bronckers, Veronica Song, and Dustin Zhang
 
 In this paper, we want to compare the use of Bayesian Additive Regression Trees (Green and Kern, 2012) versus Causal Forests (Wager and Athey, 2017) to estimate heterogenous treatment effects among survey responders. In doing so, we will assess the benefits and drawbacks of these two machine learning methods that have been touted as best-in-class methods to estimate treatment effect heterogeneity.
 
+We adopt the empirical data from Green and Kern (2012) for our comparisons. We use the well-known survey experiment about public support for government spending on welfare to the poor from the GSS to model systematic treatment effect heterogeneity based on the wording of the survey question and its interaction with racial and education perceptions.
+
 ## Background
 
 Many economists are interested in estimating treatment effects for populations or subgroups of populations. They do this by estimating Average Treatment Effect (ATE) or Conditional Average Treatment Effects (CATE). ATE is the average outcome of the treatment group in a selected population minus the average outcome of the control group in the same population. CATEs are the average treatment effects among subgroups of a population as defined by baseline covariates. 
@@ -33,10 +35,6 @@ This paper serves as a very recent reference point of the current approaches mac
 (4) Bayesian Regression Tree Models for Causal Inference: Regularization, Confounding, and Heterogeneous Effects (Hahn, Murran and Carvalho, 2019)
 
 To our knowledge, this is the only work that directly compares BART and Causal Forests for causal inference. However, this work assesses the methods only on a synthetic dataset. The authors simulate the performances of different Bayesian Causal Forest (BCF) and BART specifications in estimating CATE for a **synthetic dataset** created by the Atlantic Causal Inference Conferences (ACIC) in 2016 and for the effect of smoking on medical expenditures. They find that the BCF and BART generally "concur on the nonlinear prediction problem", BCF estimates are generally lower and have "much shorter intervals". In the synthetic ACIC data analysis, the results indicated BCF "performed best in terms of estimation error for CATE ... as measured by bias and absolute bias". We will similarly compare the results of BCF and BART applied to the estimation of treatment effect heterogeneity but, in contrast to this paper's usage of a synthetic dataset, we will apply the methods to an empirical dataset used by Green and Kern.
-
-## Methodology
-
-We adopt the empirical data from Green and Kern (2012) for our comparisons. We use the well-known survey experiment about public support for government spending on welfare to the poor from the GSS to model systematic treatment effect heterogeneity based on the wording of the survey question and its interaction with racial and education perceptions.
 
 ## Evaluation criteria
 
