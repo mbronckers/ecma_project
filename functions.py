@@ -11,7 +11,7 @@ def heterogenousTreatment(X, treatments, betas, effect):
     xb = X@betas
     for i in range(X.shape[0]):
         if int(treatments[i]) > 0:
-            xb[i] += 1 + effect * X[i][1] * X[i][4] # heterogenous treatment is 1 + 2*x_2*x_5
+            xb[i] += 1 + effect * X[i][1] * X[i][4] # heterogenous treatment is 1 + effect*x_2*x_5
     X = np.append(X, treatments, axis=1)
     return X, xb
 
