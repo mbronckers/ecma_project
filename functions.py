@@ -34,23 +34,34 @@ Returns: y, X, betas, features
 def dgp(effect_type="heterogenous", effect_homogenous=3, effect_heterogenous=2, treatment_probability=0.5, order=3, linear=False, cc=4, N=1000, rho=0.2):
     error = np.random.normal(size=(N,1))
     
-    # linear boolean will be used later to determine whether we want to include polynomial features
-    # at this point, we add two more continuous covariates if linear to have approximately same 
-    # number of covariates between the linear and nonlinear cases
+    added_covariates = 2
     if linear: 
-        cov = (np.eye(cc+2) * (1-rho)) + (np.ones((cc+2, cc+2)) * rho)
-        X = np.random.multivariate_normal(np.zeros(cc+2), cov, size=N, check_valid='warn', tol=1e-8) # generate 4 continuous covariates of X
+        # linear => include 2 more continuous covariates
+        # to have approximately same number of covariates between the linear and nonlinear cases
+        cov = (np.eye(cc+added_covariates) * (1-rho)) + (np.ones((cc+added_covariates, cc+added_covariates)) * rho)
+
+        # generate N continuous covariates of X
+        X = np.random.multivariate_normal(np.zeros(cc+added_covariates), 
+            cov, size=N, check_valid='warn', tol=1e-8) 
     else:
         cov = (np.eye(cc) * (1-rho)) + (np.ones((cc, cc)) * rho)
-        X = np.random.multivariate_normal(np.zeros(cc), cov, size=N, check_valid='warn', tol=1e-8) # generate 4 continuous covariates of X
 
+        # generate N continuous covariates of X
+        X = np.random.multivariate_normal(np.zeros(cc), 
+            cov, size=N, check_valid='warn', tol=1e-8)
+
+    # add binary [0, 1] covariate
     X = np.append(X, np.random.randint(2, size=N).reshape((-1, 1)), axis=1) # add binary [0, 1] covariate
 
     cat_elements = [1, 2, 3]
     cat_probabilities = [0.2, 0.5, 0.3] # arbitrary
-    X = np.append(X, np.random.choice(cat_elements, size=N, p=cat_probabilities).reshape((-1, 1)), axis=1) # add unordered categorical [1, 2, 3] covariate
 
-    poly = PolynomialFeatures(order, interaction_only=linear) # add third order interactions if linear is false for X covariates, increases number of covariates (to have a high dimensional dataset)
+    # add unordered categorical [1, 2, 3] covariate
+    X = np.append(X, np.random.choice(cat_elements, size=N, p=cat_probabilities).reshape((-1, 1)), axis=1)
+
+    # add N order interactions if linear is false for X covariates
+    # increases number of covariates (to have a high dimensional dataset)
+    poly = PolynomialFeatures(order, interaction_only=linear) 
     X = poly.fit_transform(X)
     X = X[:,1:] # drop the constant term
     features = (poly.get_feature_names()[1:])
@@ -58,9 +69,11 @@ def dgp(effect_type="heterogenous", effect_homogenous=3, effect_heterogenous=2, 
 
     treat_elements = [0, 1]
     treat_probabilities = [1 - treatment_probability, treatment_probability]
-    treatments = np.random.choice(treat_elements, size=N, p=treat_probabilities).reshape((-1, 1)) # randomly assigned treatments with propensity 0.5
+
+    # randomly assigned treatments with propensity treatment_probability
+    treatments = np.random.choice(treat_elements, size=N, p=treat_probabilities).reshape((-1, 1))
     
-    # configure between heterogenous and homogenous treatments
+    # heterogenous vs. homogenous treatments
     if effect_type == "homogenous":
         betas = np.append(np.random.normal(size=X.shape[1]), [effect_homogenous]).reshape(-1,1)
         X = np.append(X, treatments, axis=1)
