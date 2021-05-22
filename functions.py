@@ -7,11 +7,11 @@ Execute heterogeneous treatment on data
 
 Returns: X, X@betas
 """
-def heterogenousTreatment(X, treatments, betas, effect):
+def heterogeneousTreatment(X, treatments, betas, effect):
     xb = X@betas
     for i in range(X.shape[0]):
         if int(treatments[i]) > 0:
-            xb[i] += 1 + effect * X[i][1] * X[i][4] # heterogenous treatment is 1 + effect*x_2*x_5
+            xb[i] += 1 + effect * X[i][1] * X[i][4] # heterogeneous treatment is 1 + effect*x_2*x_5
     X = np.append(X, treatments, axis=1)
     return X, xb
 
@@ -21,8 +21,8 @@ Data Generating Process
 
 Params:
     effect_type - heterogeneous vs homogeneous
-    effect_homogenous - if effect_type is homogenous, controls what the treatment coefficient is
-    effect_heterogenous - if effect_type is heterogenous, controls n where the treatment coefficient is 1 + n * x_2 * x_5
+    effect_homogeneous - if effect_type is homogeneous, controls what the treatment coefficient is
+    effect_heterogeneous - if effect_type is heterogeneous, controls n where the treatment coefficient is 1 + n * x_2 * x_5
     treatment_probability - probability that an observation is assigned the treatment, default is 0.5
     order - order of interactions between covariates desired, as order is increased, number of covariates and nonlinearity (if specified) is also increased
     linear - flag to control whether the dgp has exponents larger than 1 
@@ -31,7 +31,7 @@ Params:
     rho - variance between continuous covariates
 Returns: y, X, betas, features
 """
-def dgp(effect_type="heterogenous", effect_homogenous=3, effect_heterogenous=2, treatment_probability=0.5, order=3, linear=False, cc=4, N=1000, rho=0.2):
+def dgp(effect_type="heterogeneous", effect_homogeneous=3, effect_heterogeneous=2, treatment_probability=0.5, order=3, linear=False, cc=4, N=1000, rho=0.2):
     error = np.random.normal(size=(N,1))
     
     added_covariates = 2
@@ -73,14 +73,14 @@ def dgp(effect_type="heterogenous", effect_homogenous=3, effect_heterogenous=2, 
     # randomly assigned treatments with propensity treatment_probability
     treatments = np.random.choice(treat_elements, size=N, p=treat_probabilities).reshape((-1, 1))
     
-    # heterogenous vs. homogenous treatments
-    if effect_type == "homogenous":
-        betas = np.append(np.random.normal(size=X.shape[1]), [effect_homogenous]).reshape(-1,1)
+    # heterogeneous vs. homogeneous treatments
+    if effect_type == "homogeneous":
+        betas = np.append(np.random.normal(size=X.shape[1]), [effect_homogeneous]).reshape(-1,1)
         X = np.append(X, treatments, axis=1)
         xb = X@betas
     else:
         betas = np.random.normal(size=X.shape[1]).reshape(-1,1)
-        X, xb = heterogenousTreatment(X, treatments, betas, effect_heterogenous)
+        X, xb = heterogeneousTreatment(X, treatments, betas, effect_heterogeneous)
 
     y = xb + error 
     return y, X, betas, features
