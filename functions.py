@@ -31,7 +31,9 @@ Params:
     rho - variance between continuous covariates
 Returns: y, X, betas, features
 """
-def dgp(effect_type="heterogeneous", effect_homogeneous=3, effect_heterogeneous=2, treatment_probability=0.5, order=3, linear=False, cc=4, N=1000, rho=0.2):
+def dgp(effect_type="heterogeneous", effect_homogeneous=3, effect_heterogeneous=2,
+        treatment_probability=0.5, order=3, linear=False, cc=4, N=1000, rho=0.2):
+    
     error = np.random.normal(size=(N,1))
     
     added_covariates = 2
@@ -83,4 +85,4 @@ def dgp(effect_type="heterogeneous", effect_homogeneous=3, effect_heterogeneous=
         X, xb = heterogeneousTreatment(X, treatments, betas, effect_heterogeneous)
 
     y = xb + error 
-    return y, X, betas, features
+    return y, X, betas, features, treatments
