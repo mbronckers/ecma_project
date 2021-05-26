@@ -1,0 +1,130 @@
+%
+\documentclass[12pt,notitlepage]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{pdflscape}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{dsfont}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{marvosym}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\usepackage[hyphenbreaks]{breakurl}
+\usepackage[hyphens]{url}
+\usepackage{setspace}
+\usepackage{epigraph}
+\usepackage{bm}
+\usepackage{textcomp}
+\usepackage{bbm}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage[shortlabels]{enumitem}
+\usepackage{graphicx}
+\setlength{\epigraphrule}{0pt}
+\setlength\parindent{3em}
+\renewcommand{\baselinestretch}{1.5}
+\renewcommand*{\arraystretch}{1.2}
+
+\setcounter{MaxMatrixCols}{10}
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\usepackage{natbib,hyperref}
+\bibliographystyle{chicago}  
+
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\BLP}{\mathrm{BLP}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+\newcommand{\Prob}{\mathrm{P}}
+\newcommand{\N}{\text{N}}
+
+\topmargin=-1.5cm \textheight=23cm \oddsidemargin=-0.0cm
+\evensidemargin=-0.0cm \textwidth=16.5cm
+\newtheorem{ass}{Assumption}
+\newtheorem{definit}{Definition}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+\newtheorem{conj}{Conjecture}
+\newtheorem{cor}{Corollary}
+\newtheorem{rem}{Remark}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+%Figure path
+\def \figroot{stata/out/}
+\def \tabroot{stata/out/}
+
+\usepackage{epsfig,hyperref}
+
+\hypersetup{
+	pdftitle={ECMA31330 Final Project},    % title
+	pdfauthor={Bronckers.Song.Zhang},     % author/Users/veronica/Documents/ECON21110/Final Project/ECON21110_FinalProject.tex
+	pdfnewwindow=true,      % links in new window
+	colorlinks=true,       % false: boxed links; true: colored links
+	linkcolor=blue,          % color of internal links
+	citecolor=red,        % color of links to bibliography
+	filecolor=black,      % color of file links
+	urlcolor=blue           % color of external links
+}
+
+\allowdisplaybreaks
+
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+        \LARGE
+        \textbf{PAPER TITLE\_Estimating Reaction to Welfare\\ Based on Question Wording \\}
+        \vspace{0.5cm}
+        \Large
+        ECMA 31330 Final Project \\ 
+        \vspace{0.8cm}
+        \large
+        Spring 2021
+        \vfill
+        \vspace{5cm}
+        \textbf{Max Bronckers \\ Veronica Song \\ Dustin Zhang}
+    \end{center}
+\end{titlepage}
+
+
+\section{Introduction} 
+In this paper, we compare the use of Bayesian Additive Regression Trees (Green and Kern, 2012) versus Causal Forests (Wager and Athey, 2017) to estimate heterogenous treatment effects among survey responders using an empirical dataset. To measure the stigma around the word "welfare", we take a survey data of individual perception on public spending and find the impact of the question phrasing on the responses. In order to uncover the heterogenous effects of the question phrasing based on a suite of socioeconomic backgrounds of the respondent, Green and Kern utilizes Bayesian Additive Regression Trees (BART). BART has been selected as a popular method for modeling heterogenous treatment effects, 
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
