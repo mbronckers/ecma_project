@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{athey2019ML}
+S.~Athey and G.~Imbens.
+\newblock Machine learning methods economists should know about, 2019.
+
+\bibitem{atheywager2019}
+S.~Athey and S.~Wager.
+\newblock Estimating treatment effects with causal forests: An application,
+  2019.
+
+\bibitem{greenkern2012}
+D.~P. GREEN and H.~L. KERN.
+\newblock Modeling heterogeneous treatment effects in survey experiments with
+  bayesian additive regression trees.
+\newblock {\em The Public Opinion Quarterly}, 76(3):491--511, 2012.
+
+\bibitem{rockova2018theory}
+V.~Rockova and E.~Saha.
+\newblock On theory for bart, 2018.
+
+\end{thebibliography}
