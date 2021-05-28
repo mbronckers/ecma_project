@@ -1,0 +1,8 @@
+- Knaus (many DGPs based on empirical data + CF): https://arxiv.org/pdf/1810.13237.pdf
+	- Section 3.2, Section 4.1
+- BART (Green & Kern): https://github.com/mbronckers/ecma_project/blob/main/Literature%20Review/Green%20and%20Kern%20BART.pdf
+- BART & BCF (comparison of results): https://github.com/mbronckers/ecma_project/blob/main/Literature%20Review/BART%20and%20BCF_Hahn%2CMurray%2CCarvalho.pdf
+- Wirths Thesis: https://github.com/mbronckers/ecma_project/blob/main/Literature%20Review/Wirths.pdf
+- Athey:  https://arxiv.org/pdf/1903.10075.pdf
+	- Chapter 6
+- Athey: Estimation and Inference of Heterogeneous Treatment Effects using Random Forests: https://github.com/mbronckers/ecma_project/blob/main/Literature%20Review/Estimation%20and%20Inference%20of%20Heterogeneous%20Treatment%20Effects%20using%20Random%20Forests%20w%20Appendix.pdf 
