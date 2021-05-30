@@ -9,10 +9,17 @@ S.~Athey and S.~Wager.
 \newblock Estimating treatment effects with causal forests: An application,
   2019.
 
+\bibitem{DML}
+V.~Chernozhukov, D.~Chetverikov, M.~Demirer, E.~Duflo, C.~Hansen, W.~Newey, and
+  J.~Robins.
+\newblock Double/debiased machine learning for treatment and structural
+  parameters.
+\newblock {\em The Econometrics Journal}, 21(1):C1--C68, 2018.
+
 \bibitem{Chipman2010}
 H.~A. Chipman, E.~I. George, and R.~E. McCulloch.
 \newblock Bart: Bayesian additive regression trees.
-\newblock {\em The Annals of Applied Statistics}, 4(1), Mar 2010.
+\newblock 4(1), Mar 2010.
 
 \bibitem{greenkern2012}
 D.~P. Green and H.~L. Kern.

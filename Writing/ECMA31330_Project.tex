@@ -139,7 +139,7 @@ respondent, Green and Kern utilizes BART. Given the theoretical shortcomings of
 BART, we aim to make causal forest estimates and compare it to the authors'
 findings. The first section of this paper fits a causal forest model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. However, since in the empirical data we are unable to distinguish the ground truth, we are confined to comparison using interval length and RMSE. In the second section, we examine the causal forest approach under different parameters of a synthetic DGP. Here, taking our DGP as ground truth, we aim to assess conditions under which the causal forest performs well or poorly and check whether these conditions hold in our empirical dataset. \\ 
 
-\section{Causal Forest Estimates of CATE in Welfare Dataset}
+\section{Causal Forest Estimates of CATE in Welfare Dataset} 
 
 \subsection{Discussion of data and motivation for research} 
 In our analysis below, we use a survey experiment from GSS which is also utilized by Green and Kern to investigate interactions between treatment and covariates that may lead to treatment effect heterogeneity. The experiment was conducted in the mid-1980s by GSS to study the negative sentiment Americans carry toward government programs labeled as "welfare". Due to associations with racial connotations and poorly managed welfare programs, respondents were found much more likely to endorse government spending for "the poor" than for public "welfare".\cite{rasinski1989}\\
@@ -149,7 +149,8 @@ Using BART, Green and Kern illustrates the extent to which such reaction to the 
 \subsection{Causal forests and model assumptions} 
 For these reasons, we choose to investigate causal forests to estimate the the treatment effect of question wording on welfare program support. Just like BART, causal forests is fit to model non-linear relationships and interactions between covariates. One advantage that causal forests carry over BART is that under weak assumptions, the estimate are asymptotically standard normal distributed with Gaussian confidence intervals.\cite{atheywager2019}. Put in context of economic policy, the presence of an asymptotic theory allows hypothesis testing regarding treatment results and thus aids policy decisions to be made. \\
 
-Causal forests are a specific form of generalized random forests (GRF), which uses adaptive sample splitting criterion taking into account the MSE. To avoid overfitting and reduce bias in the estimates, we also ensure that the tree is 'honest' - the subsample with which we grow a tree is disparate from the subsample with which we drop down and obtain predictions. In our model, we use 80\% of the welfare data to build our tree and estimate treatment effects on the rest with a 5-fold CV for parameters of the model. \\ 
+Causal forests are a specific form of generalized random forests (GRF), which uses adaptive sample splitting criterion taking into account the MSE. To avoid overfitting and reduce bias in the estimates, we also ensure that the tree is 'honest' - the subsample with which we grow a tree is disparate from the subsample with which we drop down and obtain predictions. 
+Additionally, we also note that although causal forests uncover heterogeneous treatment effects with valid confidence intervals for statistical inference, it does not necessarily address the affect of confounding due to the regularization on our trees. The terminal leaves of our tree are not homogenous across covariates for the sake of lowering variance and thus increasing precision, but with confounding within the leaves, we cannot guarantee that our treatment effect estimates will be unbiased. We thus use the Double/Debiased Machine Learning method (DML) for causal forests proposed by Chernozhukov et al. (2016) that uses orthogonalized treatment on covariates to estimate the treatment effect.\cite{DML} We achieve this through the \textit{CausalForestDML} function. In our model, we use 80\% of the welfare data to build our tree and estimate treatment effects on the rest with a 5-fold CV for parameters of the model. \\ 
 
 \subsection{Results of analysis and explanation}
 We first investigate the average treatment effects (ATE) without conditioning on any covariates for possible effect heterogeneity. We obtain an ATE of 0.336, with a standard deviation of 0.049 and a 95\% confidence interval of (0.256, 0.416). Green and Kern (2012) identified seven variables to condition the treatment effects on: \textit{party identification, political views, age, education, negative attitude towards Blacks}, and \textit{survey year}. Figure 1 displays the CATE estimates obtained by the causal forest model conditional on each of the seven variables. The blue areas represent the 95\% confidence intervals of our estimates. \\
@@ -160,7 +161,7 @@ We note that our CATE estimates from causal forest are on average lower than tho
 
 Figure 2 shows the overall presence of treatment effect heterogeneity in the sample. The histogram shows that treatment effect ranges from 10 percentage points to 52 percentage points, with the median estimated CATE of 34 percentage points. We note that compared to the BART median of 37 percentage points, we again obtain lower estimates on average. All estimates of CATE were positive, indicating that although the degrees of the response varies based on personal background covariates, all respondents react more favorably to a question framed for 'the poor' than for 'welfare'. \\
 
-\textbf{Add Interpretation of results, Comparison to BART (Bias, RMSE, Coverage, Int length)?? TBD} \\
+\textbf{Add Interpretation of results, Comparison to BART (Bias, RMSE, Coverage, Int length)?? TBD} 
 
 \subsection{Suggestions for further analysis}
 The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. \\
@@ -171,10 +172,9 @@ The causal forests approach also allows us to gauge covariate importance by calc
 
 
 
-
-
-
 \section{Testing Robustness of Causal Forest Estimates on Multiple DGPs} 
+
+The analysis using the welfare data in the section above gives us an interesting real-life application of causal forest method; however, given the lack of ground truth in the empirical situation, we are unable to test the performance of our model in terms of metrics as bias and MSE. In this section, we explore multiple synthetic DGPs to estimate how causal forest performs under different data parameters. \\
 
 CANNOT GUARANTEE cONFOUNDING IS ADDRESSED > need nonparametric standardization, but with many covariates, impossible 
 
