@@ -164,10 +164,9 @@ Figure 2 shows the overall presence of treatment effect heterogeneity in the sam
 
 \textbf{Add Interpretation of results, Comparison to BART (Bias, RMSE, Coverage, Int length)?? TBD} 
 
+
 \subsection{Suggestions for further analysis}
-The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. 
-
-
+The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. \\
 
 
 
@@ -189,7 +188,67 @@ where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates 
 \end{cases} \tag{2} \label{eq:special} \]
 Variable \textit{H} indicates whether heterogenous treatment effects are present in the model ($H = 1$), and $\delta_H$ is the size of the effect. We take $\delta_0 = 10, \delta_1 = 2$ in the base model for each homogeneous and heterogeneous cases. $X_j$ parameters are again the \textit{j} most influential features in the empirical data as obtained by SHAP values. \\
 
-\textbf{Also add about ATE stuff etc in baseline DGP} In the following analysis on parameter robustness of the model, we omit CATE estimation due to computational constraints. 
+\subsection{Assessment of CF performance in Baseline Model} 
+In the following analysis on parameter robustness of the model, we omit CATE estimation due to computational constraints. However, we are able to test the accuracy of the causal forest CATE estimate based on the ground truth of the DGP. We pick two covariates that are each responsible and not responsible for treatment effect heterogeneity in the baseline model, and see if the model accurately predicts the CATE. By doing this, we aim to see that the model accurately captures heterogeneity or lack thereof when the covariate of interest is significant/insignificant. \\
+
+The  covariate driving treatment effect heterogeneity was selected to be race of the respondent, chosen from the important features based on our DGP specification. On the other hand, the covariate less responsible for treatment effect heterogeneity in the sample was selected to be years of education received. For each covariate, we estimate the CATE across 10 bins of the variable on a sample size of 2000 and 60000 to check for convergence of our estimates. \\ 
+
+Figures (4) and (5) demonstrate the convergence of estimates to the true CATE as sample size increases. It is clear that the CATE estimates conditional on race and education seemingly converge and the estimates are smoothed out asymptotically. Table (1) details our results, and here it is clear that the CF estimates are more biased with when the covariate on which CATE is estimated on is not actually a significant source of treatment effect heterogeneity. We also observe our overall interval lengths to be larger, indicating reduced precision in our CATE estimates. This suggests that CF may yield relatively more biased and imprecise results when the covariate of interest is not actually the source of treatment effect heterogeneity. \\ 
+
+
+\begin{table}
+\caption{CF Performance on Estimating CATEs for Covariates Responsible/Not Responsible for Treatment Effect Heterogeneity in Baseline Model \\ (Sample Size 60000)}
+\centering
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{lc|ccccccc}
+          & \textbf{Bins } &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{Int. Length}&\textbf{Relative Int. Length}&\textbf{Coverage}\\
+\toprule
+&\textbf{1} & 4926.555939 & 5009.312198 & 82.756259 & 0.016798 & 469.196415 & 0.095238 & 1 \\
+\addlinespace
+ \multirow{10}{*}{\textbf{Race}} &\textbf{2} & 5142.082670 & 5179.515633 & 37.432963 & 0.007280 & 468.244818 & 0.091061 & 1 \\
+\addlinespace
+&\textbf{3} & 5360.951560 & 5329.162879 & 31.788681 & 0.005930 & 421.547511 & 0.078633 & 1 \\
+\addlinespace
+&\textbf{4} & 5353.864625 & 5357.187781 & 3.323156 & 0.000621 & 462.124527 & 0.086316 & 1 \\
+\addlinespace
+&\textbf{5} & 5366.344329 & 5414.664407 & 48.320078 & 0.009004 & 434.799978 & 0.081023 & 1 \\
+\addlinespace
+&\textbf{6} & 5480.692735 & 5488.121219 & 7.428484 & 0.001355 & 449.521619 & 0.082019 & 1 \\
+\addlinespace
+&\textbf{7} & 5420.216131 & 5447.816893 & 27.600762 & 0.005092 & 379.287211 & 0.069976 & 1 \\
+\addlinespace
+&\textbf{8} & 5662.928104 & 5635.069118 & 27.858986 & 0.004920 & 433.594357 & 0.076567 & 1 \\
+\addlinespace
+&\textbf{9} & 5785.191579 & 5693.767873 & 91.423706 & 0.015803 & 428.865523 & 0.074132 & 1 \\
+\addlinespace
+&\textbf{10} & 6059.622143 & 5897.952609 & 161.669534 & 0.026680 & 469.932142 & 0.077551 & 1\\
+\addlinespace
+\hline
+\addlinespace
+&\textbf{1} & 4008.051589 & 4396.320602 & -388.269013 & -0.096872 & 1288.243497 & 0.321414 & 1 \\
+\addlinespace
+ \multirow{10}{*}{\textbf{Educ}} &\textbf{2} & 4903.381084 & 4226.946009 & 676.435075 & 0.137953 & 1359.802736 & 0.277319 & 1 \\
+ \addlinespace
+&\textbf{3} & 4903.101215 & 4197.434466 & 705.666749 & 0.143923 & 1234.965926 & 0.251874 & 0 \\
+\addlinespace
+&\textbf{4} &5120.469566 & 4394.805763 & 725.663803 & 0.141718 & 1260.452777 & 0.246160 & 0 \\
+\addlinespace
+&\textbf{5} & 4795.588912 & 4619.913145 & 175.675767 & 0.036633 & 1183.145838 & 0.246715 & 1 \\
+\addlinespace
+&\textbf{6} & 5335.190920 & 5313.454736 & 21.736183 & 0.004074 & 1439.000123 & 0.269719 & 1 \\
+\addlinespace
+&\textbf{7} & 5300.574686 & 5446.060638 & -145.485952 & -0.027447 & 1367.322118 & 0.257957 & 1 \\\addlinespace
+&\textbf{8} &6519.749205 & 6276.318752 & 243.430452 & 0.037337 & 1673.917805 & 0.256746 & 1 \\\addlinespace
+&\textbf{9} & 6805.388626 & 6143.575069 & 661.813557 & 0.097248 & 1493.331095 & 0.219434 & 1 \\
+\addlinespace
+&\textbf{10} & 7310.980441 & 6712.932172 & 598.048269 & 0.081801 & 1553.484575 & 0.212486 & 1\\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{table}
+
+
+
 
 \subsection{DGP parameter modification and expectations of CF performance}
 
@@ -215,7 +274,13 @@ We vary the number of trees we fit in our causal forest estimator to see if our 
 
 \subsection{Results and discussion} 
 
-Figure (4) and Table (1) illustrates the parameter resilience of causal forest ATE estimates for our specified DGP. 
+Figure (6-a) and Table (2-a) illustrate the parameter resilience of causal forest ATE estimates for our specified DGP across the six parameters we have varied. We confirm that both bias and variance of our CF estimates improve with increasing sample size. The concave trend of the bias and variance also suggest that increasing sample size does improve CF performance, yet the improvement in the model marginally diminishes. Note coverage is 1 for all values of N we chose, indicating that the CF obtains asymptotic results pretty quickly even with relatively smaller sample sizes. \\ 
+
+Our test of CF robustness across varying degrees of linearity in the response surface, on the other hand, reveals that the CF is relatively stable across non-linear situations, but breaks down in situations with extremely low linearity. Figure (6-b) and Table (2-b) demonstrates this, and we observe the bias and variance of the estimates dramatically increase when the degree of linearity is `low' (\textit{i} = 8). In this case, we have a total of 156 high-dimensional interaction terms added to the $\Gamma$ given the baseline order of $\omega = 3$.  With the presence of such extremely high degrees of non-linearity, the bias and variance of the estimate exponentially increases, contrary to our initial expectations. \\ 
+
+The analysis of model resilience across imbalanced treatment and control group size behaves as initially predicted: figure (6-c) and table (2-c) show bias and RMSE is minimized at a 50/50 split between control and treatment. An interesting result is that with significant differences in group size, the CF performs better when we have a 10/90 split treatment-control than when there is a 90/10 split. Observing very few treatment cases yields more favorable results than observing very few control group cases, perhaps as it yields more conservatives estimates of the treatment effect. We also note that in situations with such extreme imbalance in group sizes, it may be challenging to estimate heterogeneous treatment effects for the lack of data points we can estimate adequate counterfactuals on. Figure (6-d) and table (2-d) also shows similar results as modifying the propensity score, since the failure of the overlap condition forces some individuals to have 0\% change of receiving treatment, and thus creates and mismatch in the treatment-control group size. As expected, the violation of the overlap assumption does not significantly worsen CF performance, although there is some increase in bias, RMSE, and the interval length can be noted. \\ 
+
+Testing increasing degrees of treatment effect heterogeneity in the model yields promising results for the CF, as performance is significantly improved with some degree of heterogeneity compared to complete homogeneity. 
 
 
 \begin{table}
@@ -330,16 +395,15 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 
 
 
+
 \section{Conclusion}
 WRITESOME SHIT\\
 
 
 
-\newpage
-\bibliographystyle{abbrv}
-\bibliography{Bibliography}
 
-\begin{figure}[h]
+
+\begin{figure}[!htp]
 \caption{CATE Estimates by Covariate}
 \resizebox*{\textwidth}{!}{
 	\centering
@@ -371,20 +435,46 @@ WRITESOME SHIT\\
 	\end{subfigure}}
 \end{figure} 
 
-\begin{figure}[h]
+\begin{figure}[!htp]
 \caption{Histogram of CATE Estimates}
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/s1_catefreq.png}
 \end{figure} 
 
-\begin{figure}[h]
+\begin{figure}[!htp]
 \caption{Summary of SHAP Values of Covariate Importance}
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/s1_shap.png}
 \end{figure} 
 
-\begin{figure}[h]
-\caption{Model Performance by Parameter Variation }
+\begin{figure}[!htp]
+\caption{Estimated vs. Actual CATE across Race Groups}
+	\centering
+	\begin{subfigure} [h] {0.45\linewidth}
+		\caption{\textbf{2000 Samples}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_race2000.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {0.45\linewidth}
+		\caption{\textbf{60000 Samples}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_race60000.png}
+	\end{subfigure}
+\end{figure} 
+
+\begin{figure}[!htp]
+\caption{Estimated vs. Actual CATE across Education Level}
+	\centering
+	\begin{subfigure} [h] {0.45\linewidth}
+		\caption{\textbf{2000 Samples}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_educ2000.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {0.45\linewidth}
+		\caption{\textbf{60000 Samples}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_educ60000.png}
+	\end{subfigure}
+\end{figure} 
+
+\begin{figure}[!htp]
+\caption{Relative Model Performance by Parameter Variation }
 	\centering
 	\begin{subfigure} [h] {\linewidth}
 		\caption{\textbf{Sample Size}}
@@ -409,18 +499,43 @@ WRITESOME SHIT\\
 
 \begin{figure}
 \ContinuedFloat
-	\begin{subfigure} [t] {\linewidth}
+	\begin{subfigure} [!ht] {\linewidth}
 		\caption{\textbf{Degree of Heterogeneity}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_hetero.png}
 	\end{subfigure}
-	\begin{subfigure} [t] {\linewidth}
+	\begin{subfigure} [!ht] {\linewidth}
 \vspace{0.5cm}
 		\caption{\textbf{Number of Estimators}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_nestimator.png}
 	\end{subfigure}
 \end{figure} 
 
+\clearpage
+\bibliographystyle{abbrv}
+\bibliography{Bibliography}
 
+
+\clearpage
+\appendix
+\section{References from Green and Kern (2012) }
+
+\begin{figure}[!ht]
+\renewcommand{\thefigure}{A1}
+\caption{CATE Estimates Obtained by BART}
+	\centering
+   	 	\includegraphics[width = 0.6\linewidth]{Graphs/A_GK_cate.png} \\
+\footnotesize
+\emph{Notes:} Source: Green and Kern (2012). GSS 1986–2010. CATE estimates (on the probability scale) are shown. The dark grey areas are point-wise 95\% posterior bands; the light grey areas are global 95\% posterior bands. Marginal covariate distributions are displayed at the bottom of the graphs.
+\end{figure} 
+
+\begin{figure}[!ht]
+\renewcommand{\thefigure}{A2}
+\caption{Histogram of CATE Estimates (BART)}
+	\centering
+   	 	\includegraphics[width = 0.6\linewidth]{Graphs/A_GK_catefreq.png} \\ 
+\footnotesize
+\emph{Notes:} Source: Green and Kern (2012). GSS 1986–2010. The graph displays a histogram of CATE estimates (on the probability scale). The vertical dashed line denotes the median CATE estimate.
+\end{figure} 
 
 
 \end{document}
