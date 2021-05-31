@@ -164,7 +164,7 @@ Figure 2 shows the overall presence of treatment effect heterogeneity in the sam
 \textbf{Add Interpretation of results, Comparison to BART (Bias, RMSE, Coverage, Int length)?? TBD} 
 
 \subsection{Suggestions for further analysis}
-The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. \\
+The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. 
 
 
 
@@ -172,12 +172,83 @@ The causal forests approach also allows us to gauge covariate importance by calc
 
 
 
-\section{Testing Robustness of Causal Forest Estimates on Multiple DGPs} 
+\section{Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP} 
 
-The analysis using the welfare data in the section above gives us an interesting real-life application of causal forest method; however, given the lack of ground truth in the empirical situation, we are unable to test the performance of our model in terms of metrics as bias and MSE. In this section, we explore multiple synthetic DGPs to estimate how causal forest performs under different data parameters. \\
+The analysis using the welfare data in the section above gives us an interesting real-life application of causal forest method; however, given the lack of ground truth in the empirical situation, we are unable to test the performance of our model in terms of metrics as bias and MSE. In this section, we explore multiple synthetic DGPs to estimate how causal forest performs under different data parameters. 
 
-CANNOT GUARANTEE cONFOUNDING IS ADDRESSED > need nonparametric standardization, but with many covariates, impossible 
+\subsection{Baseline DGP specification} 
 
+We specify a DGP that resembles our empirical data using a simplified model of N individuals and 120 covariates. Each variable is drawn from a gaussian normal with mean and covariance obtained from the empirical data. We then take each randomly generated covariate and convert to its corresponding form. We assume that the outcome data is generated as: 
+\[ Y = B \Gamma + T  \cdot \Theta(X) \tag{1} \label{eq:special}\]
+where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates including their higher-order interactions with the \textit{i} most important features in the model. This parameter models the degree of linearity in the response surface: \textit{i} features are selected based on SHAP values obtained in the empirical analysis from section 1, and raised to the order of $\omega$ to model non-linear interactions and increased importance of these variables. In our baseline model, we sample N=5000 individuals with parameters $\omega = 3, i = 4$ for `med'-degree linearity. T, our treatment vector, models both binary and continuous treatment assignment; in the binary case, $ T \sim Binomial(n,p)$ where \textit{p} is the probability of receiving treatment. We assume there is a 50\% probability of treatment in the baseline model. In the continuous case, we sample treatment from $T \sim Unif(0,1)$. We model heterogeneous or homogeneous treatment effects through $\Theta(X)$ as defined in equation (2). 
+\[
+\Theta(X) =  \begin{cases} 
+	 \delta_H & {\{H = 0\}} \\ 
+	 \delta_H \cdot \big( \sum_{j = 0}^{J} X_j + (\sum_{j = 0}^{J} X_j )^\omega ) & \{ H = 1 \} \\ 
+\end{cases} \tag{2} \label{eq:special} \]
+Variable \textit{H} indicates whether heterogenous treatment effects are present in the model ($H = 1$), and $\delta_H$ is the size of the effect. We take $\delta_0 = 10, \delta_1 = 2$ in the base model for each homogeneous and heterogeneous cases. $X_j$ parameters are again the \textit{j} most influential features in the empirical data as obtained by SHAP values. \\
+
+\textbf{Also add about ATE stuff etc in baseline DGP} In the following analysis on parameter robustness of the model, we omit CATE estimation due to computational constraints. 
+
+\subsection{DGP parameter modification and expectations of CF performance}
+
+Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) percentage treated, 4) overlap, 5) degree of treatment effect heterogeneity, 6) treatment type,} and \textit{7) number of estimators}. 
+\subsubsection{Sample size} 
+In order to test the asymptotic theory of the causal forest estimates, we test the model performance on multiple sample sizes, $ N = \{1000, 5000, 10000\}$. We expect from standard statistics for both our bias and variance to decrease with increasing sample size, given our estimate converges to the true CATE value. Accordingly, interval length would also decrease.
+
+\subsubsection{Linearity in response surface} 
+We tweak the degree of linearity in our covariates to check if the causal forests model is able to handle higher degree relationships and complex interactions between variables. 4 degrees of linearity are explored, specified by \textit{i} in our definition of $\Gamma$ in equation (1) - which corresponds to \textit{full (i = 0), high (i=2), med (i=4), low (i=8)}. As causal forests are expected to be apt at detecting non-linear relationships than traditional treatment effect estimation methods as OLS, we would expect the model to be robust to the introduction of a non-linear response surface. 
+
+\subsubsection{Percentage treated} 
+
+\subsubsection{Overlap}
+
+\subsubsection{Degree of treatment effect heterogeneity} 
+Causal forest maximizes 
+\cite{athey2018grf}
+
+
+
+nonlinenarity incrases in gamma > nonlinearity in Y given Xs 
+treat level effect heterogeneity - increasing the effect of treatment heterogeneity 
+
+
+
+
+Causal forests maximizes heterogeneity in its splits. \cite{strimatter}
+
+
+
+
+
+
+
+
+\subsection{Results and discussion} 
+
+Figure (4) and Table (1) illustrates our results, and we confirm that both bias and RMSE decreases with increasing sample size. 
+\begin{table}
+\caption{ATE with Sample Size Variation}
+\centering
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccc}
+            \textbf{N} &\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Coverage}&\textbf{Int. Length}\\
+\toprule
+\textbf{1000}        &    243.20 &    99999         &     287.11 &     1.0 & 1528.25\\
+\addlinespace
+\textbf{5000}   &   101.21         &      99999  &       126.20         &       1.0 & 881.80 \\
+\addlinespace
+\textbf{10000}        &    73.12 &    99999         &     95.11 &     1.0 & 698.63 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative bias calculated as percentage bias compared to true ATE}\\
+\end{tabular}}}
+\end{table}
+
+
+
+\section{Scribbles}
 Expectations of CF performance in different priors (DGPs), for instance normal \& Theoretical justification \\
 
 Discussion of parameters/ What we are doing (how we are tweaking - 5 topics: overlap, alignment, treatment effect heterogeneity, nonlinearity in response/treatment) (TBD)  \\
@@ -236,6 +307,15 @@ Discussion of causal forest performance depending on model parameters (how colli
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/s1_shap.png}
 \end{figure} 
+
+\begin{figure}[h]
+\caption{Convergence on Sample Size}
+	\centering
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_nsiz.png}
+\end{figure} 
+
+
+
 
 \end{document}
 
