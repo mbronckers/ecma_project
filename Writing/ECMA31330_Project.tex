@@ -226,13 +226,13 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \caption{Sample Size} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
-            \textbf{N} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+            \textbf{N} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Int. Length}&\textbf{Relative Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{1000}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{1000}         &    5439.607849	  &    5284.487310  &    173.520082	 &    0.031899	         &     202.689775  &    0.037262  & 1496.219129&    0.275060 &     1.0\\
 \addlinespace
-\textbf{5000}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{5000}     &    5480.217592  &    5428.476930 &   53.144836	         &      0.009698  &       60.950723   &    0.011122  & 885.568983&    0.161594     &       1.0 \\
 \addlinespace
-\textbf{10000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{10000}         &    5464.342620  &    5437.754914 &    27.367210	 &    0.005008         &     30.277228 &    0.005541    & 706.760847 &    0.129341     &     1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
@@ -245,13 +245,13 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \begin{tabular}{l|ccccccccc}
             \textbf{i} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{full}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{full}         &    5468.773915  &    5440.039188 &    36.353349 &    0.006647     &     45.801340	  &    0.008375  & 1.358807e+03 &    0.248466 &     1.0\\
 \addlinespace
-\textbf{high}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{high}     &    5453.578001	  &    5417.485903&   38.292994         &      0.007022	  &       47.719423   &    0.008750  & 1.289210e+03&    0.236397     &       1.0 \\
 \addlinespace
-\textbf{med}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{med}         &    5535.015621  &    5489.769929 &    45.867383 &    0.008287         &     56.011837 &    0.010120    & 8.908016e+02	&    0.160939     &     1.0 \\
 \addlinespace
-\textbf{low}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{low}         &    5455.065609  &    11248.379766 &   612400.414644  &    112.262704         &      813537.503514  &    149.134321    & 3.958072e+07 	&    7255.772887     &     1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
@@ -264,11 +264,11 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \begin{tabular}{l|ccccccccc}
             \textbf{p} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{0.1}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{0.1}         &    5490.340503  &    5427.326138 &    132.827121 &    0.024193         &     179.524301  &    0.032698  & 1825.641746&    0.332519 &     1.0\\
 \addlinespace
-\textbf{0.5}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{0.5}     &    5481.328925  &    5449.166690&   36.238026         &      0.006611  &       45.833821   &    0.008362  & 881.562651&    0.160830     &       1.0 \\
 \addlinespace
-\textbf{0.9}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{0.9}         &    5469.355627  &    5387.042317 &    182.914155 &    0.033443         &     222.873837 &    0.040750    & 1803.281973&    0.329706     &     1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
@@ -281,9 +281,9 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \begin{tabular}{l|ccccccccc}
             \textbf{overlap} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{True}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{True}         &    5453.466708  &    5403.129840 &    50.684381 &    0.009294         &     60.060401  &    0.011013  & 883.900621&    0.162081 &     1.0\\
 \addlinespace
-\textbf{False}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{False}     &    5456.466230  &    5404.707229 &102.429344 &      0.018772  &       128.709960   &    0.023589  & 1075.963858&    0.197191     &       1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
@@ -296,13 +296,13 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \begin{tabular}{l|ccccccccc}
             \textbf{j} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{0}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{0}         &    1.000000e+01  &    9.826431e+00 &    6.307467e-01 &    0.063075         &     8.345605e-01  &    0.083456  & 4.932942e+01&    4.932942 &     1.0\\
 \addlinespace
-\textbf{2}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{2}     &    	7.931915e+02  &    	7.874031e+02&   6.198745e+00         &      0.007815  &       7.912705e+00   &    0.009976  & 	1.647809e+02	&    0.207744     &       1.0 \\
 \addlinespace
-\textbf{4}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{4}         &    5.458236e+03  &    5.407529e+03 &    5.270965e+01 &    0.009657         &     6.209724e+01 &    0.011377    & 8.760214e+02	&    0.160495     &     1.0 \\
 \addlinespace
-\textbf{8}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{8}         &    1.262573e+10  &    1.256825e+10 &    1.283857e+08 &    0.010169         &     1.695761e+08 &    0.013431    & 3.384565e+09&    0.268069     &     1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
@@ -315,13 +315,13 @@ Figure (4) and Table (1) illustrates the parameter resilience of causal forest A
 \begin{tabular}{l|ccccccccc}
             \textbf{Num\_Estimator} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{100}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\textbf{100}         &    5565.936961  &    5532.114094 &    33.822867 &    0.006077         &     33.822867  &    0.006077  & 1042.320012&    0.187268 &     1.0\\
 \addlinespace
-\textbf{500}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\textbf{500}     &    5523.942920	  &    5449.390716&   74.552204         &      0.013496	  &       74.552204   &    0.013496  & 830.519095&    0.150349     &       1.0 \\
 \addlinespace
-\textbf{1000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{1000}         &    5474.819893	  &    5450.791857	 &    24.028036 &    0.004389	         &     24.028036 &    0.004389    & 819.989987&    0.149775	     &     1.0 \\
 \addlinespace
-\textbf{5000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\textbf{5000}         &    5361.625270  &    5287.516977 &    74.108293 &    0.013822         &     74.108293 &    0.013822    & 840.772017 &    0.156813     &     1.0 \\
 \bottomrule
 \multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
 \end{tabular}}
