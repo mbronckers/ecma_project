@@ -4,4 +4,15 @@
 \BOOKMARK [2][-]{subsection.2.2}{Causal forests and model assumptions}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.3}{Results of analysis and explanation}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{Suggestions for further analysis}{section.2}% 6
-\BOOKMARK [1][-]{section.3}{Testing Robustness of Causal Forest Estimates on Multiple DGPs}{}% 7
+\BOOKMARK [1][-]{section.3}{Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Baseline DGP specification}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{DGP parameter modification and expectations of CF performance}{section.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Sample size}{subsection.3.2}% 10
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Linearity in response surface}{subsection.3.2}% 11
+\BOOKMARK [3][-]{subsubsection.3.2.3}{Propensity score}{subsection.3.2}% 12
+\BOOKMARK [3][-]{subsubsection.3.2.4}{Overlap}{subsection.3.2}% 13
+\BOOKMARK [3][-]{subsubsection.3.2.5}{Degree of treatment effect heterogeneity}{subsection.3.2}% 14
+\BOOKMARK [3][-]{subsubsection.3.2.6}{Treatment type}{subsection.3.2}% 15
+\BOOKMARK [3][-]{subsubsection.3.2.7}{Number of estimators}{subsection.3.2}% 16
+\BOOKMARK [2][-]{subsection.3.3}{Results and discussion}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{Scribbles}{}% 18

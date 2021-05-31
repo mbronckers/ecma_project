@@ -1,4 +1,4 @@
-%
+
 \documentclass[12pt]{article}
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -102,42 +102,43 @@
 
 \section{Introduction} 
 There has been an increasing adoption of Machine Learning (ML) methods in
-economics for algorithmic approaches to causal inference. Whereas initially the
-ML methods were avoided due to uncertainty in its consistency, normality, and
-efficiency, major developments in methodology has allowed a stable large-sample
-confidence interval to be constructed around treatment effect estimates
-conditional on multiple covariates.\cite{athey2019ML} \\
+economics for causal inference. While initially ML methods were avoided due to
+an uncertainty in its consistency, normality, and efficiency, major developments in
+methodology have allowed a stable large-sample confidence interval to be
+constructed around treatment effect estimates conditional on multiple
+covariates--leading to the broader adoption of these methods.~\cite{athey2019ML} \\
 
-One such method is the Bayesian Additive Regression Trees (BART) used by Green and Kern (2012), which
-allows heterogeneous treatment effects to be modeled flexibly. Using a Markov
-Chain Monte Carlo (MCMC) algorithm that derives effects from the posterior mean
-and interval instead of pre-specified tree parameters, BART has a much smoother
-and adaptive structure than traditional OLS or single tree models popular in
-economics, and is also resilient to problems with
-overfitting.\cite{greenkern2012} However, despite its excellent predictive
-capacity, BART lacks an asymptotic explanation of the estimates and are thus
-difficult for causal inference and application. Though recent work by Ročková
-and Saha (2018) suggests modifications to BART that may allow asypmtotic concentration of
-the posterior mean around the true mean, the construction of an asymptotic
-theory of BART estimates is still an ongoing effort.\cite{rockova2018theory}.
-Another such method is the causal forests proposed by Wager and Athey (2017),
-which estimates are asymptotically gaussian and unbiased to allow proper
-confidence intervals to be constructed around the treatment effect. The
-construction of adequate confidence intervals is especially relevant in policy
-applications, as consistent estimates can be produced for the treatment
-group.\cite{atheywager2019} \\ 
+One such method is Bayesian Additive Regression Trees (BART), a non-parametric
+method that models heterogeneous treatment effects flexibly by building on the
+concept of ensembles of trees. Using a Markov Chain Monte Carlo (MCMC) algorithm
+that derives effects from the posterior mean and interval instead of
+pre-specified tree parameters, BART has a much smoother and adaptive structure
+than traditional OLS or single tree models popular in economics, and is also
+resilient to problems with overfitting.~\cite{greenkern2012} However, despite its
+excellent predictive capacity, BART lacks an asymptotic explanation for its
+estimates and is not guaranteed to converge in polynomial time
+\cite{atheywager2019}, weakening its effectiveness as inference tool. Though
+recent work by Ročková and Saha (2018) suggests modifications to BART that may
+allow asypmtotic concentration of the posterior mean around the true mean, the
+construction of an asymptotic theory of BART estimates is still an ongoing
+effort. ~\cite{rockova2018theory}. An alternative method is the Causal Forest (CF),
+proposed by Wager and Athey (2017). One of the advantages of CF is that their
+estimates are asymptotically gaussian and unbiased, allowing proper confidence
+intervals to be constructed around the treatment effect. The construction of
+adequate confidence intervals is especially relevant in policy applications, as
+consistent estimates can be produced for the treatment group.~\cite{atheywager2019} \\ 
 
-In this paper, we compare the aforementioned two popular ML tools in
-heterogenous treatment effects estimation among survey responders using an
-empirical dataset. Specifically, we aim to compare uses of BART versus Causal
-Forests, using OLS estimates of heterogeneous treatment effects as a benchmark.
-To measure the stigma around the word "welfare", we take a survey data of
-individual perception on public spending and find the impact of the question
-phrasing on the responses. In order to uncover the heterogenous effects of the
-question phrasing based on a suite of socioeconomic backgrounds of the
-respondent, Green and Kern utilizes BART. Given the theoretical shortcomings of
-BART, we aim to make causal forest estimates and compare it to the authors'
-findings. The first section of this paper fits a causal forest model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. However, since in the empirical data we are unable to distinguish the ground truth, we are confined to comparison using interval length and RMSE. In the second section, we examine the causal forest approach under different parameters of a synthetic DGP. Here, taking our DGP as ground truth, we aim to assess conditions under which the causal forest performs well or poorly and check whether these conditions hold in our empirical dataset. \\ 
+In this paper, we evaluate Causal Forests as a method for heterogeneous
+treatment effect estimation on both empirical and simulated datasets.
+Specifically, we compare the CF method to BART in the estimation of heterogenous
+treatment effects in a survey experiment on welfare opinions from the General
+Social Survey as used by Green and Kern. Green and Kern use the GSS survey dataset with individual perception on public spending. To find the impact of the question phrasing on the responses, they use BART to estimate heterogeneous treatment effects by conditioning on a suite of socioeconomic backgrounds of the respondent. Given
+the theoretical shortcomings of BART and the theoretical benefits of CFs, we
+apply CFs to same problem and empirical dataset and compare it to the authors'
+findings.
+
+In section 2, we fit a CF model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. Since empirical data offers no ground truth CATEs, we are confined to comparing the methods on interval length and RMSE. In section 3, we remedy this shortcoming with an evaluation of the CF method applied to DGPs that attempt to represent the empirical dataset. Using the ground truth ATE and CATEs of our DGPs, we assess the CF's performance under a variety of different DGP parameters and assess the conditions under which CFs perform well or poorly.
+\\ 
 
 \section{Causal Forest Estimates of CATE in Welfare Dataset} 
 
@@ -192,25 +193,22 @@ Variable \textit{H} indicates whether heterogenous treatment effects are present
 
 \subsection{DGP parameter modification and expectations of CF performance}
 
-Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of treatment effect heterogeneity, 6) treatment type,} and \textit{7) number of estimators}. 
+Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) percentage treated, 4) overlap, 5) degree of treatment effect heterogeneity, 6) treatment type,} and \textit{7) number of estimators}. 
 \subsubsection{Sample size} 
 In order to test the asymptotic theory of the causal forest estimates, we test the model performance on multiple sample sizes, $ N = \{1000, 5000, 10000\}$. We expect from standard statistics for both our bias and variance to decrease with increasing sample size, given our estimate converges to the true CATE value. Accordingly, interval length would also decrease.
 
 \subsubsection{Linearity in response surface} 
 We tweak the degree of linearity in our covariates to check if the causal forests model is able to handle higher degree relationships and complex interactions between variables. 4 degrees of linearity are explored, specified by \textit{i} in our definition of $\Gamma$ in equation (1) - which corresponds to \textit{full (i = 0), high (i=2), med (i=4), low (i=8)}. As causal forests are expected to be apt at detecting non-linear relationships than traditional treatment effect estimation methods as OLS, we would expect the model to be robust to the introduction of a non-linear response surface. 
 
-\subsubsection{Propensity score} 
-In this scenario, the data has an imbalanced treatment and control group sizes. Since treatment assignment is random with the propensity score $p = \pi(X)$ being constant across all individuals we do not expect this change to introduce any selection bias. However, as the ATE estimates are obtained by taking differences in means at the terminal node, the deviation in group sizes from a 50/50 split will likely harm the power of our model and increase the variance in our estimates. We estimate treatment probabilities of $p = \{0.1, 0.5, 0.9\}$ for extreme cases of imbalance. 
+\subsubsection{Percentage treated} 
 
 \subsubsection{Overlap}
-We explore situations in which the propensity score \textit{p} satisfies or fails the overlap condition: $0 < p = \pi(X) < 1$. Given that in traditional statistical settings, overlap ensures there are observations on which we can estimate credible counterfactuals, we expect our causal forest estimate variances to increase without the condition. When overlap does not hold, we randomly sample half of the observations and force $T = 0$ to ensure that half the sample always has a 0\% probability of receiving treatment. 
 
 \subsubsection{Degree of treatment effect heterogeneity} 
-Causal forest optimizes sample-split by encouraging heterogeneity in a key parameter and penalizing variance in the leaves.\cite{athey2018grf} The model is expected to show stable performance across the presence of complex heterogeneous effects. For this reason, we decide to alter the degree of treatment effect heterogeneity in the model, $\Theta(X)$, to check if the causal forest estimates are robust under such changes. We specify 4 different parameter values of $j = \{0,2,4,8\}$ for \textit{j} in equation (2). 
+Causal forest maximizes 
+\cite{athey2018grf}
 
-\subsubsection{Treatment type}
 
-\subsubsection{Number of estimators} 
 
 nonlinenarity incrases in gamma > nonlinearity in Y given Xs 
 treat level effect heterogeneity - increasing the effect of treatment heterogeneity 
