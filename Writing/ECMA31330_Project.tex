@@ -102,55 +102,56 @@
 
 \section{Introduction} 
 There has been an increasing adoption of Machine Learning (ML) methods in
-economics for algorithmic approaches to causal inference. Whereas initially the
-ML methods were avoided due to uncertainty in its consistency, normality, and
-efficiency, major developments in methodology has allowed a stable large-sample
-confidence interval to be constructed around treatment effect estimates
-conditional on multiple covariates.\cite{athey2019ML} \\
+economics for causal inference. While initially ML methods were avoided due to
+an uncertainty in their consistency, normality, and efficiency, major developments in
+methodology have allowed a stable large-sample confidence interval to be
+constructed around treatment effect estimates conditional on multiple
+covariates--leading to the broader adoption of these methods.~\cite{athey2019ML} \\
 
-One such method is the Bayesian Additive Regression Trees (BART) used by Green and Kern (2012), which
-allows heterogeneous treatment effects to be modeled flexibly. Using a Markov
-Chain Monte Carlo (MCMC) algorithm that derives effects from the posterior mean
-and interval instead of pre-specified tree parameters, BART has a much smoother
-and adaptive structure than traditional OLS or single tree models popular in
-economics, and is also resilient to problems with
-overfitting.\cite{greenkern2012} However, despite its excellent predictive
-capacity, BART lacks an asymptotic explanation of the estimates and are thus
-difficult for causal inference and application. Though recent work by Ročková
-and Saha (2018) suggests modifications to BART that may allow asypmtotic concentration of
-the posterior mean around the true mean, the construction of an asymptotic
-theory of BART estimates is still an ongoing effort.\cite{rockova2018theory}.
-Another such method is the causal forests proposed by Wager and Athey (2017),
-which estimates are asymptotically gaussian and unbiased to allow proper
-confidence intervals to be constructed around the treatment effect. The
-construction of adequate confidence intervals is especially relevant in policy
-applications, as consistent estimates can be produced for the treatment
-group.\cite{atheywager2019} \\ 
+One such method is Bayesian Additive Regression Trees (BART), a non-parametric
+method that models heterogeneous treatment effects flexibly by building on the
+concept of ensembles of trees. Using a Markov Chain Monte Carlo (MCMC) algorithm
+that derives effects from the posterior mean and interval instead of
+pre-specified tree parameters, BART has a much smoother and adaptive structure
+than traditional OLS or single tree models popular in economics, and is also
+resilient to problems with overfitting.~\cite{greenkern2012} However, despite its
+excellent predictive capacity, BART lacks an asymptotic explanation for its
+estimates and is not guaranteed to converge in polynomial time
+\cite{atheywager2019}, weakening its effectiveness as inference tool. Though
+recent work by Ročková and Saha (2018) suggests modifications to BART that may
+allow asypmtotic concentration of the posterior mean around the true mean, the
+construction of an asymptotic theory of BART estimates is still an ongoing
+effort.~\cite{rockova2018theory} An alternative method is the Causal Forest (CF),
+proposed by Wager and Athey (2017). One of the advantages of CF is that their
+estimates are asymptotically gaussian and unbiased, allowing proper confidence
+intervals to be constructed around the treatment effect. The construction of
+adequate confidence intervals is especially relevant in policy applications, as
+consistent estimates can be produced for the treatment group.~\cite{atheywager2019} \\ 
 
-In this paper, we compare the aforementioned two popular ML tools in
-heterogenous treatment effects estimation among survey responders using an
-empirical dataset. Specifically, we aim to compare uses of BART versus Causal
-Forests, using OLS estimates of heterogeneous treatment effects as a benchmark.
-To measure the stigma around the word "welfare", we take a survey data of
-individual perception on public spending and find the impact of the question
-phrasing on the responses. In order to uncover the heterogenous effects of the
-question phrasing based on a suite of socioeconomic backgrounds of the
-respondent, Green and Kern utilizes BART. Given the theoretical shortcomings of
-BART, we aim to make causal forest estimates and compare it to the authors'
-findings. The first section of this paper fits a causal forest model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. However, since in the empirical data we are unable to distinguish the ground truth, we are confined to comparison using interval length and RMSE. In the second section, we examine the causal forest approach under different parameters of a synthetic DGP. Here, taking our DGP as ground truth, we aim to assess conditions under which the causal forest performs well or poorly and check whether these conditions hold in our empirical dataset. \\ 
+In this paper, we evaluate Causal Forests as a method for heterogeneous
+treatment effect estimation on both empirical and simulated datasets.
+Specifically, we compare the CF method to BART in the estimation of heterogenous
+treatment effects in a survey experiment on welfare opinions from the General
+Social Survey as used by Green and Kern. Green and Kern use the GSS survey dataset with individual perception on public spending. To find the impact of the question phrasing on the responses, they use BART to estimate heterogeneous treatment effects by conditioning on a suite of socioeconomic backgrounds of the respondent. Given
+the theoretical shortcomings of BART and the theoretical benefits of CFs, we
+apply CFs to same problem and empirical dataset and compare it to the authors'
+findings.
+
+In section 2, we fit a CF model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. Since empirical data offers no ground truth CATEs, we are confined to comparing the methods on interval length and RMSE. In section 3, we remedy this shortcoming with an evaluation of the CF method applied to DGPs that attempt to represent the empirical dataset. Using the ground truth ATE and CATEs of our DGPs, we assess the CF's performance under a variety of different DGP parameters and assess the conditions under which CFs perform well or poorly.
+\\ 
 
 \section{Causal Forest Estimates of CATE in Welfare Dataset} 
 
 \subsection{Discussion of data and motivation for research} 
-In our analysis below, we use a survey experiment from GSS which is also utilized by Green and Kern to investigate interactions between treatment and covariates that may lead to treatment effect heterogeneity. The experiment was conducted in the mid-1980s by GSS to study the negative sentiment Americans carry toward government programs labeled as "welfare". Due to associations with racial connotations and poorly managed welfare programs, respondents were found much more likely to endorse government spending for "the poor" than for public "welfare".\cite{rasinski1989}\\
+In our analysis below, we use a survey experiment from GSS which is also utilized by Green and Kern to investigate interactions between treatment and covariates that may lead to treatment effect heterogeneity. The experiment was conducted in the mid-1980s by GSS to study the negative sentiment Americans carry toward government programs labeled as "welfare". Due to associations with racial connotations and poorly managed welfare programs, respondents were found much more likely to endorse government spending for "the poor" than for public "welfare".~\cite{rasinski1989}\\
 
-Using BART, Green and Kern illustrates the extent to which such reaction to the question wording as "welfare" varies based on the respondents' background characteristics such as years of education, race, or political alignment. BART has been a popular choice for heterogeneous treatment effect modeling, as its estimates require little parameter tuning, allow accurate detection of interactions between covariates, and are much smoother than those of single tree models. Each individual tree in the forest has only a small effect on the model, by assuming a prior distribution over the tree parameters.\cite{Chipman2010} Such lack of any individual influential trees allow regular model fit of the BART set up. Then, a MCMC algorithm is used to sample tree parameters iteratively from the posterior distribution as the model is fit. Though this assumption of prior distribution and back-fitting algorithm allows BART to be relatively invariant across, in the presence of confounding variables and treatment effect heterogeneity, such regularization may severely bias the treatment effect estimates.\cite{CarvalhoHahnMurray} Moreover, BART estimates still lack theoretical explanation on its asymptotic concentration, making the construction of adequate confidence intervals challenging. 
+Using BART, Green and Kern illustrates the extent to which such reaction to the question wording as "welfare" varies based on the respondents' background characteristics such as years of education, race, or political alignment. BART has been a popular choice for heterogeneous treatment effect modeling, as its estimates require little parameter tuning, allow accurate detection of interactions between covariates, and are much smoother than those of single tree models. Each individual tree in the forest has only a small effect on the model, by assuming a prior distribution over the tree parameters.~\cite{Chipman2010} Such lack of any individual influential trees allow regular model fit of the BART set up. Then, a MCMC algorithm is used to sample tree parameters iteratively from the posterior distribution as the model is fit. Though this assumption of prior distribution and back-fitting algorithm allows BART to be relatively invariant across, in the presence of confounding variables and treatment effect heterogeneity, such regularization may severely bias the treatment effect estimates~\cite{CarvalhoHahnMurray}. Moreover, BART estimates still lack theoretical explanation on its asymptotic concentration, making the construction of adequate confidence intervals challenging. 
 
 \subsection{Causal forests and model assumptions} 
-For these reasons, we choose to investigate causal forests to estimate the the treatment effect of question wording on welfare program support. Just like BART, causal forests is fit to model non-linear relationships and interactions between covariates. One advantage that causal forests carry over BART is that under weak assumptions, the estimate are asymptotically standard normal distributed with Gaussian confidence intervals.\cite{atheywager2019}. Put in context of economic policy, the presence of an asymptotic theory allows hypothesis testing regarding treatment results and thus aids policy decisions to be made. \\
+For these reasons, we choose to investigate causal forests to estimate the the treatment effect of question wording on welfare program support. Just like BART, causal forests is fit to model non-linear relationships and interactions between covariates. One advantage that causal forests carry over BART is that under weak assumptions, the estimate are asymptotically standard normal distributed with Gaussian confidence intervals.~\cite{atheywager2019}. Put in context of economic policy, the presence of an asymptotic theory allows hypothesis testing regarding treatment results and thus aids policy decisions to be made. \\
 
 Causal forests are a specific form of generalized random forests (GRF), which uses adaptive sample splitting criterion taking into account the MSE. To avoid overfitting and reduce bias in the estimates, we also ensure that the tree is 'honest' - the subsample with which we grow a tree is disparate from the subsample with which we drop down and obtain predictions. 
-Additionally, we also note that although causal forests uncover heterogeneous treatment effects with valid confidence intervals for statistical inference, it does not necessarily address the affect of confounding due to the regularization on our trees. The terminal leaves of our tree are not homogenous across covariates for the sake of lowering variance and thus increasing precision, but with confounding within the leaves, we cannot guarantee that our treatment effect estimates will be unbiased. We thus use the Double/Debiased Machine Learning method (DML) for causal forests proposed by Chernozhukov et al. (2016) that uses orthogonalized treatment on covariates to estimate the treatment effect.\cite{DML} We achieve this through the \textit{CausalForestDML} function. In our model, we use 80\% of the welfare data to build our tree and estimate treatment effects on the rest with a 5-fold CV for parameters of the model. \\ 
+Additionally, we also note that although causal forests uncover heterogeneous treatment effects with valid confidence intervals for statistical inference, it does not necessarily address the affect of confounding due to the regularization on our trees. The terminal leaves of our tree are not homogenous across covariates for the sake of lowering variance and thus increasing precision, but with confounding within the leaves, we cannot guarantee that our treatment effect estimates will be unbiased. We thus use the Double/Debiased Machine Learning method (DML) for causal forests proposed by Chernozhukov et al. (2016) that uses orthogonalized treatment on covariates to estimate the treatment effect.~\cite{DML} We achieve this through the \textit{CausalForestDML} function. In our model, we use 80\% of the welfare data to build our tree and estimate treatment effects on the rest with a 5-fold CV for parameters of the model. \\ 
 
 \subsection{Results of analysis and explanation}
 We first investigate the average treatment effects (ATE) without conditioning on any covariates for possible effect heterogeneity. We obtain an ATE of 0.336, with a standard deviation of 0.049 and a 95\% confidence interval of (0.256, 0.416). Green and Kern (2012) identified seven variables to condition the treatment effects on: \textit{party identification, political views, age, education, negative attitude towards Blacks}, and \textit{survey year}. Figure 1 displays the CATE estimates obtained by the causal forest model conditional on each of the seven variables. The blue areas represent the 95\% confidence intervals of our estimates. \\
@@ -180,7 +181,7 @@ The analysis using the welfare data in the section above gives us an interesting
 
 We specify a DGP that resembles our empirical data using a simplified model of N individuals and 120 covariates. Each variable is drawn from a gaussian normal with mean and covariance obtained from the empirical data. We then take each randomly generated covariate and convert to its corresponding form. We assume that the outcome data is generated as: 
 \[ Y = B \Gamma + T  \cdot \Theta(X) \tag{1} \label{eq:special}\]
-where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates including their higher-order interactions with the \textit{i} most important features in the model. This parameter models the degree of linearity in the response surface: \textit{i} features are selected based on SHAP values obtained in the empirical analysis from section 1, and raised to the order of $\omega$ to model non-linear interactions and increased importance of these variables. In our baseline model, we sample N=5000 individuals with parameters $\omega = 3, i = 4$ for `med'-degree linearity. T, our treatment vector, models both binary and continuous treatment assignment; in the binary case, $ T \sim Binomial(n,p)$ where \textit{p} is the probability of receiving treatment. We assume there is a 50\% probability of treatment in the baseline model. In the continuous case, we sample treatment from $T \sim Unif(0,1)$. We model heterogeneous or homogeneous treatment effects through $\Theta(X)$ as defined in equation (2). 
+where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates including their higher-order interactions with the \textit{i} most important features in the model. This parameter models the degree of linearity in the response surface: \textit{i} features are selected based on SHAP values obtained in the empirical analysis from section 1, and raised to the order of $\omega$ to model non-linear interactions and increased importance of these variables. In our baseline model, we sample N=5000 individuals with parameters $\omega = 3, i = 4$ for `med'-degree linearity. T, our treatment vector, models both binary and continuous treatment assignment; in the binary case, $ T \sim Binomial(n,p)$ where \textit{p} is the probability of receiving treatment (propensity score). We assume there is a 50\% probability of treatment in the baseline model. In the continuous case, we sample treatment from $T \sim Unif(0,1)$. We model heterogeneous or homogeneous treatment effects through $\Theta(X)$ as defined in equation (2). 
 \[
 \Theta(X) =  \begin{cases} 
 	 \delta_H & {\{H = 0\}} \\ 
@@ -192,7 +193,7 @@ Variable \textit{H} indicates whether heterogenous treatment effects are present
 
 \subsection{DGP parameter modification and expectations of CF performance}
 
-Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of treatment effect heterogeneity, 6) treatment type,} and \textit{7) number of estimators}. 
+Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of treatment effect heterogeneity,} and \textit{6) number of estimators}. 
 \subsubsection{Sample size} 
 In order to test the asymptotic theory of the causal forest estimates, we test the model performance on multiple sample sizes, $ N = \{1000, 5000, 10000\}$. We expect from standard statistics for both our bias and variance to decrease with increasing sample size, given our estimate converges to the true CATE value. Accordingly, interval length would also decrease.
 
@@ -206,60 +207,131 @@ In this scenario, the data has an imbalanced treatment and control group sizes. 
 We explore situations in which the propensity score \textit{p} satisfies or fails the overlap condition: $0 < p = \pi(X) < 1$. Given that in traditional statistical settings, overlap ensures there are observations on which we can estimate credible counterfactuals, we expect our causal forest estimate variances to increase without the condition. When overlap does not hold, we randomly sample half of the observations and force $T = 0$ to ensure that half the sample always has a 0\% probability of receiving treatment. 
 
 \subsubsection{Degree of treatment effect heterogeneity} 
-Causal forest optimizes sample-split by encouraging heterogeneity in a key parameter and penalizing variance in the leaves.\cite{athey2018grf} The model is expected to show stable performance across the presence of complex heterogeneous effects. For this reason, we decide to alter the degree of treatment effect heterogeneity in the model, $\Theta(X)$, to check if the causal forest estimates are robust under such changes. We specify 4 different parameter values of $j = \{0,2,4,8\}$ for \textit{j} in equation (2). 
-
-\subsubsection{Treatment type}
+Causal forest optimizes sample-split by preferring leaves with heterogeneity in a key parameter and penalizing those with greater variance~\cite{athey2018grf}. The model is expected to show stable performance across the presence of complex heterogeneous effects. For this reason, we decide to alter the degree of treatment effect heterogeneity in the model, $\Theta(X)$, to check if the causal forest estimates are robust under such changes. We specify 4 different parameter values of $j = \{0,2,4,8\}$ for \textit{j} in equation (2). 
 
 \subsubsection{Number of estimators} 
-
-nonlinenarity incrases in gamma > nonlinearity in Y given Xs 
-treat level effect heterogeneity - increasing the effect of treatment heterogeneity 
-
-
-
-
-Causal forests maximizes heterogeneity in its splits. \cite{strimatter}
-
-
-
-
-
-
+We vary the number of trees we fit in our causal forest estimator to see if our estimates are sensitive to tuning parameters. The baseline model had 1000 trees in each forest, and we expect with increasing number of trees we will be able to reduce overfitting and the importance of each tree in the estimate. Naturally, we believe the increase in this parameter will also show an increase in bias for CATE as our estimates are averaged out over multiple trees. However, this may not be as pronounced in the ATE estimate, which takes the average across the entire sample. We take the \textit{number of trees =} \{100, 500, 1000, 5000\} in each forest. 
 
 
 \subsection{Results and discussion} 
 
-Figure (4) and Table (1) illustrates our results, and we confirm that both bias and RMSE decreases with increasing sample size. 
+Figure (4) and Table (1) illustrates the parameter resilience of causal forest ATE estimates for our specified DGP. 
+
+
 \begin{table}
-\caption{ATE with Sample Size Variation}
+\caption{Model Performance with Parameter Variation}
 \centering
-{
-\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\vspace{0.5cm}
+\begin{subtable}{\textwidth}
+\caption{Sample Size} 
 \resizebox*{\textwidth}{!}{
-\begin{tabular}{l|ccccc}
-            \textbf{N} &\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Coverage}&\textbf{Int. Length}\\
+\begin{tabular}{l|ccccccccc}
+            \textbf{N} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
 \toprule
-\textbf{1000}        &    243.20 &    99999         &     287.11 &     1.0 & 1528.25\\
+\textbf{1000}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
 \addlinespace
-\textbf{5000}   &   101.21         &      99999  &       126.20         &       1.0 & 881.80 \\
+\textbf{5000}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
 \addlinespace
-\textbf{10000}        &    73.12 &    99999         &     95.11 &     1.0 & 698.63 \\
+\textbf{10000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
 \bottomrule
-\multicolumn{6}{p{\textwidth}}{\footnotesize Relative bias calculated as percentage bias compared to true ATE}\\
-\end{tabular}}}
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
+
+\begin{subtable}{\textwidth}
+\vspace{0.5cm}
+\caption{Linearity} 
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccccccc}
+            \textbf{i} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+\toprule
+\textbf{full}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\addlinespace
+\textbf{high}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\addlinespace
+\textbf{med}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\addlinespace
+\textbf{low}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
+
+\begin{subtable}{\textwidth}
+\vspace{0.5cm}
+\caption{Propensity Score} 
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccccccc}
+            \textbf{p} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+\toprule
+\textbf{0.1}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\addlinespace
+\textbf{0.5}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\addlinespace
+\textbf{0.9}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
+
+\begin{subtable}{\textwidth}
+\vspace{0.5cm}
+\caption{Overlap} 
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccccccc}
+            \textbf{overlap} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+\toprule
+\textbf{True}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\addlinespace
+\textbf{False}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
+
+\begin{subtable}{\textwidth}
+\vspace{0.5cm}
+\caption{Degree of Heterogeneity} 
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccccccc}
+            \textbf{j} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+\toprule
+\textbf{0}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\addlinespace
+\textbf{2}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\addlinespace
+\textbf{4}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\addlinespace
+\textbf{8}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
+
+\begin{subtable}{\textwidth}
+\vspace{0.5cm}
+\caption{Number of Estimators} 
+\resizebox*{\textwidth}{!}{
+\begin{tabular}{l|ccccccccc}
+            \textbf{Num\_Estimator} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
+\toprule
+\textbf{100}         &    99999  &    99999 &    243.20 &    99999         &     287.11  &    99999  & 1528.25&    99999 &     1.0\\
+\addlinespace
+\textbf{500}     &    99999  &    99999&   101.21         &      99999  &       126.20   &    99999  & 881.80&    99999     &       1.0 \\
+\addlinespace
+\textbf{1000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\addlinespace
+\textbf{5000}         &    99999  &    99999 &    73.12 &    99999         &     95.11 &    99999    & 698.63&    99999     &     1.0 \\
+\bottomrule
+\multicolumn{6}{p{\textwidth}}{\footnotesize Relative values calculated as percentage of estimated value compared to true population ATE}\\
+\end{tabular}}
+\end{subtable}
 \end{table}
 
 
 
-\section{Scribbles}
-Expectations of CF performance in different priors (DGPs), for instance normal \& Theoretical justification \\
-
-Discussion of parameters/ What we are doing (how we are tweaking - 5 topics: overlap, alignment, treatment effect heterogeneity, nonlinearity in response/treatment) (TBD)  \\
-
-Present Results (TBD)\\
-
-Discussion of causal forest performance depending on model parameters (how collinearity amongst columns/means/variance in the variables) (TBD) \\
-
+\section{Conclusion}
+WRITESOME SHIT\\
 
 
 
@@ -312,9 +384,40 @@ Discussion of causal forest performance depending on model parameters (how colli
 \end{figure} 
 
 \begin{figure}[h]
-\caption{Convergence on Sample Size}
+\caption{Model Performance by Parameter Variation }
 	\centering
+	\begin{subfigure} [h] {\linewidth}
+		\caption{\textbf{Sample Size}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_nsiz.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {\linewidth}
+\vspace{0.5cm}
+		\caption{\textbf{Linearity}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_linear.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {\linewidth}
+\vspace{0.5cm}
+		\caption{\textbf{Propensity Score}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_propen.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {\linewidth}
+\vspace{0.5cm}
+		\caption{\textbf{Overlap}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_overlap.png}
+	\end{subfigure}
+\end{figure} 
+
+\begin{figure}
+\ContinuedFloat
+	\begin{subfigure} [t] {\linewidth}
+		\caption{\textbf{Degree of Heterogeneity}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_hetero.png}
+	\end{subfigure}
+	\begin{subfigure} [t] {\linewidth}
+\vspace{0.5cm}
+		\caption{\textbf{Number of Estimators}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_nestimator.png}
+	\end{subfigure}
 \end{figure} 
 
 

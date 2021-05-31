@@ -1,0 +1,52 @@
+\begin{thebibliography}{1}
+
+\bibitem{athey2019ML}
+S.~Athey and G.~Imbens.
+\newblock Machine learning methods economists should know about, 2019.
+
+\bibitem{athey2018grf}
+S.~Athey, J.~Tibshirani, and S.~Wager.
+\newblock Generalized random forests, 2018.
+
+\bibitem{atheywager2019}
+S.~Athey and S.~Wager.
+\newblock Estimating treatment effects with causal forests: An application,
+  2019.
+
+\bibitem{DML}
+V.~Chernozhukov, D.~Chetverikov, M.~Demirer, E.~Duflo, C.~Hansen, W.~Newey, and
+  J.~Robins.
+\newblock Double/debiased machine learning for treatment and structural
+  parameters.
+\newblock {\em The Econometrics Journal}, 21(1):C1--C68, 2014.
+
+\bibitem{Chipman2010}
+H.~A. Chipman, E.~I. George, and R.~E. McCulloch.
+\newblock Bart: Bayesian additive regression trees.
+\newblock 4(1), Mar 2010.
+
+\bibitem{greenkern2012}
+D.~P. Green and H.~L. Kern.
+\newblock Modeling heterogeneous treatment effects in survey experiments with
+  bayesian additive regression trees.
+\newblock {\em The Public Opinion Quarterly}, 76(3):491--511, 2012.
+
+\bibitem{CarvalhoHahnMurray}
+P.~R. Hahn, J.~S. Murray, and C.~M. Carvalho.
+\newblock {Bayesian Regression Tree Models for Causal Inference:
+  Regularization, Confounding, and Heterogeneous Effects (with Discussion)}.
+\newblock {\em Bayesian Analysis}, 15(3):965 -- 1056, 2020.
+
+\bibitem{rasinski1989}
+K.~A. Rasinski.
+\newblock The effect of question wording on public support for government
+  spending.
+\newblock 53(3):388--394.
+\newblock \_eprint:
+  https://academic.oup.com/poq/article-pdf/53/3/388/5301247/53-3-388.pdf.
+
+\bibitem{rockova2018theory}
+V.~Rockova and E.~Saha.
+\newblock On theory for bart, 2018.
+
+\end{thebibliography}
