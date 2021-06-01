@@ -6,7 +6,7 @@
 \BOOKMARK [2][-]{subsection.2.4}{Suggestions for further analysis}{section.2}% 6
 \BOOKMARK [1][-]{section.3}{Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{}% 7
 \BOOKMARK [2][-]{subsection.3.1}{Baseline DGP specification}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.2}{Assessment of CF performance in Baseline Model}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.2}{Assessment of CF performance in Baseline DGP}{section.3}% 9
 \BOOKMARK [2][-]{subsection.3.3}{DGP parameter modification and expectations of CF performance}{section.3}% 10
 \BOOKMARK [3][-]{subsubsection.3.3.1}{Sample size}{subsection.3.3}% 11
 \BOOKMARK [3][-]{subsubsection.3.3.2}{Linearity in response surface}{subsection.3.3}% 12

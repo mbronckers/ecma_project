@@ -6,7 +6,7 @@
 \contentsline {subsection}{\numberline {2.4}Suggestions for further analysis}{6}{subsection.2.4}%
 \contentsline {section}{\numberline {3}Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{6}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Baseline DGP specification}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Assessment of CF performance in Baseline Model}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.2}Assessment of CF performance in Baseline DGP}{7}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}DGP parameter modification and expectations of CF performance}{7}{subsection.3.3}%
 \contentsline {subsubsection}{\numberline {3.3.1}Sample size}{9}{subsubsection.3.3.1}%
 \contentsline {subsubsection}{\numberline {3.3.2}Linearity in response surface}{9}{subsubsection.3.3.2}%
