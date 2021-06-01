@@ -109,7 +109,7 @@ economics for causal inference. While initially ML methods were avoided due to
 an uncertainty in their consistency, normality, and efficiency, major developments in
 methodology have allowed a stable large-sample confidence interval to be
 constructed around treatment effect estimates conditional on multiple
-covariates--leading to the broader adoption of these methods.~\cite{athey2019ML} \\
+covariates--leading to the broader adoption of these methods~\cite{athey2019ML}. \\
 
 One such method is Bayesian Additive Regression Trees (BART), a non-parametric
 method that models heterogeneous treatment effects flexibly by building on the
@@ -117,19 +117,19 @@ concept of ensembles of trees. Using a Markov Chain Monte Carlo (MCMC) algorithm
 that derives effects from the posterior mean and interval instead of
 pre-specified tree parameters, BART has a much smoother and adaptive structure
 than the traditional OLS or single tree models popular in economics and is also
-resilient to problems with overfitting.~\cite{greenkern2012} However, despite its
+resilient to problems with overfitting~\cite{greenkern2012}. However, despite its
 excellent predictive capacity, BART lacks an asymptotic explanation for its
 estimates and is not guaranteed to converge in polynomial time
 \cite{atheywager2019}, weakening its effectiveness as inference tool. Though
 recent work by Ročková and Saha (2018) suggests modifications to BART that may
 allow asypmtotic concentration of the posterior mean around the true mean, the
 construction of an asymptotic theory of BART estimates is still an ongoing
-effort.~\cite{rockova2018theory} Causal Forest (CF) is an alternative method,
+effort~\cite{rockova2018theory}. Causal Forest (CF) is an alternative method,
 proposed by Wager and Athey (2017). One of the advantages of CF is that their
 estimates are asymptotically gaussian and unbiased, allowing proper confidence
 intervals to be constructed around the treatment effect. The construction of
 adequate confidence intervals is especially relevant in policy applications, as
-consistent estimates can be produced for the treatment group.~\cite{atheywager2019} \\ 
+consistent estimates can be produced for the treatment group~\cite{atheywager2019}. \\ 
 
 In this paper, we evaluate Causal Forests as a method for heterogeneous
 treatment effect estimation on both empirical and simulated datasets.
@@ -213,9 +213,7 @@ lowering variance and thus increasing precision, but with confounding within the
 leaves, we cannot guarantee that our treatment effect estimates will be
 unbiased. We consequently use the Double/Debiased Machine Learning method (DML) for
 causal forests, as proposed by Chernozhukov et al. (2016), which uses orthogonalized
-treatment on covariates to estimate the treatment effect~\cite{DML}. 
-% say why this guarantees unbiasedness of our estimator (the problem of normal CF)
-\\
+treatment on covariates to estimate the treatment effect~\cite{DML}. \\
 
 For our evaluation, we use the \textit{CausalForestDML} from the \texttt{econml}
 package. The method fits the estimators for fitting the response to the features
@@ -232,7 +230,7 @@ our data in $80/20$ train/test sets, train our tree using 5-fold cross
 validation (CV), and estimate treatment effects on the remaining test set. For
 inference, the implementation uses a bootstrap-of-little-bags to calculate the
 parameter vector covariance. All other parameters are left to their default
-values. 
+values.
 
 \subsection{Results and analysis}
 We first estimate the ATE without conditioning on any covariates for possible
@@ -251,7 +249,7 @@ comparable to our confidence interval.
 
 Figure (\ref{figure:one}) shows the estimated CATEs conditional on each of the seven variables
 obtained by our CF model. The blue areas represent the 95\% CIs of our
-estimates.\footnote{Note that the bands of the Green and Kern results in the appendix are \%posterior intervals and \textit{not} confidence intervals.}
+estimates.\footnote{Note that the bands of the Green and Kern results in the appendix are \% posterior intervals and \textit{not} confidence intervals.}
 The upper two graphs of figure 1 present CATEs as a function of \textit{party
 identification} and self-identified \textit{political alignment}. Controlling
 for all other covariates, we see an absolute 5\% and 3\% percentage points
