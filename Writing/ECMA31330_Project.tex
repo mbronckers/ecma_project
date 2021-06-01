@@ -100,7 +100,9 @@
     \end{center}
 \end{titlepage}
 
+\tableofcontents
 
+\clearpage
 \section{Introduction} 
 There has been an increasing adoption of Machine Learning (ML) methods in
 economics for causal inference. While initially ML methods were avoided due to
@@ -550,7 +552,9 @@ In order to investigate variation in treatment effects through interaction with 
 
 Our analysis reveals that although the CF estimates are lower on average, the CF-obtained trends of the CATEs across different covariates are largely similar to those obtained by BART. We also find that on top of the six covariates identified as sources of systemic effect heterogeneity by Green and Kern, \textit{work status} and \textit{racial backgrounds} are also potentially significant drivers. We leave further exploration of these variables to a future opportunity. The CATE estimates across different attributes are approximately normally distributed, confirming that we have obtained asymptotic convergence in our sample and therefore a valid confidence interval for our estimates. \\ 
 
-When varying six different parameters of the DGP and the tree characteristics, we confirm that CF estimates are generally stable across diverse model specifications, and even in relatively smaller sample sizes. CF clearly performs best when the covariates are largely linearly related, and there is some treatment effect heterogeneity present in the model. Our estimates also demonstrate excellent coverage across variations in model parameters. We notice that our model coverage significantly outperforms results suggested in existing literature, and recognize that this may be due to the comparative simplicity of our DGP to other synthetic data (such as ACIC data analysis challenge) ~\cite{dorieACIC}.
+When varying six different parameters of the DGP and the tree characteristics, we confirm that CF estimates are generally stable across diverse model specifications, and even in relatively smaller sample sizes. CF clearly performs best when the covariates are largely linearly related, and there is some treatment effect heterogeneity present in the model. Our estimates also demonstrate excellent coverage across variations in model parameters. We notice that our model coverage significantly outperforms results suggested in existing literature, and recognize that this may be due to the comparative simplicity of our DGP to other synthetic data (such as ACIC data analysis challenge) ~\cite{dorieACIC}. \\
+
+This paper provides promising results on the performance and stability of the CF method, as well as improves on the effect of the question wording as `for the poor' on support for welfare programs. 
 
 
 
