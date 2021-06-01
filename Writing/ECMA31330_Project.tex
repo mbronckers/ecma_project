@@ -100,7 +100,9 @@
     \end{center}
 \end{titlepage}
 
+\tableofcontents
 
+\clearpage
 \section{Introduction} 
 There has been an increasing adoption of Machine Learning (ML) methods in
 economics for causal inference. While initially ML methods were avoided due to
@@ -320,13 +322,22 @@ BART in future lines of research.
 
 \section{Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP} 
 
-The analysis using the welfare data in the section above gives us an interesting real-life application of causal forest method; however, given the lack of ground truth in the empirical situation, we are unable to test the performance of our model in terms of metrics as bias and MSE. In this section, we explore multiple synthetic DGPs to estimate how causal forest performs under different data parameters. 
+The analysis on the welfare data in section 2 shows the real-life application of
+CF as estimator for heterogeneous treatment effects; however, since empirical
+data offers no ground truth treatment effect, it is hard to draw conclusions
+from the differences in estimates between CF and BART on the welfare data and
+evaluate performance objectively. To remedy this, we evaluate the performance of
+CF on simulated data that is somewhat similar to the empirical welfare dataset.
+Specifically, in this section we explore multiple synthetic DGPs and evaluate
+how CF performs under different data generating parameters. For every parameter
+evaluation, we ran $K=30$ simulations on a server with 48 Intel Xeon Silver 4214
+CPUs @ 2.20GHz and 126GB of RAM memory.
 
 \subsection{Baseline DGP specification} 
 
-We specify a DGP that resembles our empirical data using a simplified model of N individuals and 120 covariates. Each variable is drawn from a gaussian normal with mean and covariance obtained from the empirical data. We then take each randomly generated covariate and convert to its corresponding form. We assume that the outcome data is generated as: 
+We specify a DGP that resembles our empirical data using a simplified model of N individuals and 120 covariates. The covariates are drawn from a multivariate Gaussian distribution with means and covariance matrix obtained from the empirical data. We assume that the outcome data is generated as: 
 \[ Y = B \Gamma + T  \cdot \Theta(X) \tag{1} \label{eq:special}\]
-where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates including their higher-order interactions with the \textit{i} most important features in the model. This parameter models the degree of linearity in the response surface: \textit{i} features are selected based on SHAP values obtained in the empirical analysis from section 1, and raised to the order of $\omega$ to model non-linear interactions and increased importance of these variables. In our baseline model, we sample N=5000 individuals with parameters $\omega = 3, i = 4$ for `med'-degree linearity. T, our treatment vector, models both binary and continuous treatment assignment; in the binary case, $ T \sim Binomial(n,p)$ where \textit{p} is the probability of receiving treatment (propensity score). We assume there is a 50\% probability of treatment in the baseline model. In the continuous case, we sample treatment from $T \sim Unif(0,1)$. We model heterogeneous or homogeneous treatment effects through $\Theta(X)$ as defined in equation (2). 
+where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates including their higher-order interactions with the \textit{i} most important features in the model. This parameter models the degree of linearity in the response surface: \textit{i} features are selected based on SHAP values obtained in the empirical analysis from section 1, and raised to the order of $\omega$ to model non-linear interactions and increased importance of these variables. In our baseline model, we sample $N=5000$ individuals with parameters $\omega = 3, i = 4$ (defined as \textit{med}-degree linearity). $T$, our treatment vector, models binary treatment assignment via $ T \sim Binomial(n,p)$ where \textit{p} is the probability of receiving treatment (propensity score). We assume there is a 50\% probability of treatment in the baseline model. We model heterogeneous or homogeneous treatment effects through $\Theta(X)$ as defined in equation (2). 
 \[
 \Theta(X) =  \begin{cases} 
 	 \delta_H & {\{H = 0\}} \\ 
@@ -334,16 +345,40 @@ where $\Gamma = X + \sum_{i = 0}^{I} X_i^\omega$ is the full list of covariates 
 \end{cases} \tag{2} \label{eq:special} \]
 Variable \textit{H} indicates whether heterogenous treatment effects are present in the model ($H = 1$), and $\delta_H$ is the size of the effect. We take $\delta_0 = 10, \delta_1 = 2$ in the base model for each homogeneous and heterogeneous cases. $X_j$ parameters are again the \textit{j} most influential features in the empirical data as obtained by SHAP values. \\
 
-\subsection{Assessment of CF performance in Baseline Model} 
-In the following analysis on parameter robustness of the model, we omit CATE estimation due to computational constraints. However, we are able to test the accuracy of the causal forest CATE estimate based on the ground truth of the DGP. We pick two covariates that are each responsible and not responsible for treatment effect heterogeneity in the baseline model, and see if the model accurately predicts the CATE. By doing this, we aim to see that the model accurately captures heterogeneity or lack thereof when the covariate of interest is significant/insignificant. \\
+\subsection{Assessment of CF performance in Baseline DGP} 
 
-The  covariate driving treatment effect heterogeneity was selected to be race of the respondent, chosen from the important features based on our DGP specification. On the other hand, the covariate less responsible for treatment effect heterogeneity in the sample was selected to be years of education received. For each covariate, we estimate the CATE across 10 bins of the variable on a sample size of 2000 and 60000 to check for convergence of our estimates. \\ 
+In our assessment of CF as treatment effect estimator applied to our baseline
+DGP, we evaluate the estimated ATE and CATEs conditioned on two covariates (one
+involved in treatment effect heterogeneity, the other not) against their ground
+truth values. In doing so, we assess whether the model accurately captures the
+heterogeneity, or possible lack thereof, when the covariate of interest is
+significant/insignificant with respect to the treatment effect. 
 
-Figures (4) and (5) demonstrate the convergence of estimates to the true CATE as sample size increases. It is clear that the CATE estimates conditional on race and education seemingly converge and the estimates are smoothed out asymptotically. Table (1) details our results, and here it is clear that the CF estimates are more biased with when the covariate on which CATE is estimated on is not actually a significant source of treatment effect heterogeneity. We also observe our overall interval lengths to be larger, indicating reduced precision in our CATE estimates. This suggests that CF may yield relatively more biased and imprecise results when the covariate of interest is not actually the source of treatment effect heterogeneity. \\ 
+We selected the covariate of interest involved in treatment effect heterogeneity
+to be \textit{race} of the respondent, chosen from the important features based
+on our DGP specification. We chose the covariate unresponsible for treatment
+effect heterogeneity in the sample to be years of \textit{education} received.
+For each covariate, we estimate the CATE across $10$ bins of the variable on a
+sample size of $N = 1000$ and $N = 30\,000$ to check for convergence of our
+estimates. Due to computational constraints, we only ran the estimation of CATEs
+on the simulated data once. \\ 
 
+Figures (4) and (5) demonstrate the convergence of estimates to the true CATE as
+sample size increases. It is clear that the CATE estimates conditional on race
+and education converge and the estimates are smoothed out asymptotically. Table
+(1) details our results, and here it is clear that the CF estimates are more
+biased when the covariate on which CATE is conditioned is not actually a
+significant source of treatment effect heterogeneity. We also observe our
+overall interval lengths to be considerably greater, indicating reduced
+precision in our CATE estimates. Whereas the estimated 95\% CI for CATE
+conditioned on race contains the true CATE for all bins, the CI for CATE on
+education is wider and misses the true CATE for some range of covariate values
+(bin 3 and 4). This suggests that CF yields relatively more biased and imprecise
+CATEs with wider CIs when the covariate of interest is not actually the source
+of treatment effect heterogeneity. \\ 
 
 \begin{table}
-\caption{CF Performance on Estimating CATEs for Covariates Responsible/Not Responsible for Treatment Effect Heterogeneity in Baseline Model \\ (Sample Size 60000)}
+\caption{CF Performance on Estimating CATEs for Covariates Responsible/Not Responsible for Treatment Effect Heterogeneity in Baseline Model \\ (Sample Size 30000)}
 \centering
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{lc|ccccccc}
@@ -398,24 +433,68 @@ Figures (4) and (5) demonstrate the convergence of estimates to the true CATE as
 
 \subsection{DGP parameter modification and expectations of CF performance}
 
-Based on the synthetic DGP above, we test the causal forest model for robustness by modifying the parameters. We then estimate the model \textit{K = 50} times for each parameter value in a range of different parameters. We consider the following dimensions for parameter tweaking: \textit{1) sample size, 2) non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of treatment effect heterogeneity,} and \textit{6) number of estimators}. 
+Based on the synthetic DGP above, we test the CF model for robustness by
+modifying the parameters. We then estimate the model \textit{K = 50} times for
+each parameter value in a range of different parameters. We consider the
+following dimensions for parameter tweaking: \textit{1) sample size, 2)
+non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of
+treatment effect heterogeneity,} and \textit{6) number of estimators}. 
+
 \subsubsection{Sample size} 
-In order to test the asymptotic theory of the causal forest estimates, we test the model performance on multiple sample sizes, $ N = \{1000, 5000, 10000\}$. We expect from standard statistics for both our bias and variance to decrease with increasing sample size, given our estimate converges to the true CATE value. Accordingly, interval length would also decrease.
+In order to test the asymptotic theory of the causal forest estimates, we test
+the model performance on multiple sample sizes, $ N = \{1000, 5000, 10000\}$. We
+expect from standard statistics for both our bias and variance to decrease with
+increasing sample size, given our estimate converges to the true CATE value.
+Accordingly, interval length would also decrease.
 
 \subsubsection{Linearity in response surface} 
-We tweak the degree of linearity in our covariates to check if the causal forests model is able to handle higher degree relationships and complex interactions between variables. 4 degrees of linearity are explored, specified by \textit{i} in our definition of $\Gamma$ in equation (1) - which corresponds to \textit{full (i = 0), high (i=2), med (i=4), low (i=8)}. As causal forests are expected to be apt at detecting non-linear relationships than traditional treatment effect estimation methods as OLS, we would expect the model to be robust to the introduction of a non-linear response surface. 
+We tweak the degree of linearity in our covariates to check if the causal
+forests model is able to handle higher degree relationships and complex
+interactions between variables. 4 degrees of linearity are explored, specified
+by \textit{i} in our definition of $\Gamma$ in equation (1) - which corresponds
+to \textit{full (i = 0), high (i=2), med (i=4), low (i=8)}. As causal forests
+are expected to be apt at detecting non-linear relationships than traditional
+treatment effect estimation methods as OLS, we would expect the model to be
+robust to the introduction of a non-linear response surface. 
 
 \subsubsection{Propensity score} 
-In this scenario, the data has an imbalanced treatment and control group sizes. Since treatment assignment is random with the propensity score $p = \pi(X)$ being constant across all individuals we do not expect this change to introduce any selection bias. However, as the ATE estimates are obtained by taking differences in means at the terminal node, the deviation in group sizes from a 50/50 split will likely harm the power of our model and increase the variance in our estimates. We estimate treatment probabilities of $p = \{0.1, 0.5, 0.9\}$ for extreme cases of imbalance. 
+In this scenario, the data has an imbalanced treatment and control group sizes.
+Since treatment assignment is random with the propensity score $p = \pi(X)$
+being constant across all individuals we do not expect this change to introduce
+any selection bias. However, as the ATE estimates are obtained by taking
+differences in means at the terminal node, the deviation in group sizes from a
+50/50 split will likely harm the power of our model and increase the variance in
+our estimates. We estimate treatment probabilities of $p = \{0.1, 0.5, 0.9\}$
+for extreme cases of imbalance. 
 
 \subsubsection{Overlap}
-We explore situations in which the propensity score \textit{p} satisfies or fails the overlap condition: $0 < p = \pi(X) < 1$. Given that in traditional statistical settings, overlap ensures there are observations on which we can estimate credible counterfactuals, we expect our causal forest estimate variances to increase without the condition. When overlap does not hold, we randomly sample half of the observations and force $T = 0$ to ensure that half the sample always has a 0\% probability of receiving treatment. 
+We explore situations in which the propensity score \textit{p} satisfies or
+fails the overlap condition: $0 < p = \pi(X) < 1$. Given that in traditional
+statistical settings, overlap ensures there are observations on which we can
+estimate credible counterfactuals, we expect our CF estimate variances to
+increase without the condition. When overlap does not hold, we randomly sample
+half of the observations and force $T = 0$ to ensure that half the sample always
+has a 0\% probability of receiving treatment. 
 
 \subsubsection{Degree of treatment effect heterogeneity} 
-Causal forest optimizes sample-split by preferring leaves with heterogeneity in a key parameter and penalizing those with greater variance~\cite{athey2018grf}. The model is expected to show stable performance across the presence of complex heterogeneous effects. For this reason, we decide to alter the degree of treatment effect heterogeneity in the model, $\Theta(X)$, to check if the causal forest estimates are robust under such changes. We specify 4 different parameter values of $j = \{0,2,4,8\}$ for \textit{j} in equation (2). 
+The CF model optimizes sample-split by preferring leaves with heterogeneity in
+a key parameter and penalizing those with greater variance~\cite{athey2018grf}.
+The model is expected to show stable performance across the presence of complex
+heterogeneous effects. For this reason, we decide to alter the degree of
+treatment effect heterogeneity in the model, $\Theta(X)$, to check if the causal
+forest estimates are robust under such changes. We specify 4 different parameter
+values of $j = \{0,2,4,8\}$ for \textit{j} in equation (2). 
 
 \subsubsection{Number of estimators} 
-We vary the number of trees we fit in our causal forest estimator to see if our estimates are sensitive to tuning parameters. The baseline model had 1000 trees in each forest, and we expect with increasing number of trees we will be able to reduce overfitting and the importance of each tree in the estimate. Naturally, we believe the increase in this parameter will also show an increase in bias for CATE as our estimates are averaged out over multiple trees. However, this may not be as pronounced in the ATE estimate, which takes the average across the entire sample. We take the \textit{number of trees =} \{100, 500, 1000, 5000\} in each forest. 
+We vary the number of trees we fit in our causal forest estimator to see if our
+estimates are sensitive to tuning parameters. The baseline model had 1000 trees
+in each forest, and we expect with increasing number of trees we will be able to
+reduce overfitting and the importance of each tree in the estimate. Naturally,
+we believe the increase in this parameter will also show an increase in bias for
+CATE as our estimates are averaged out over multiple trees. However, this may
+not be as pronounced in the ATE estimate, which takes the average across the
+entire sample. We take the \textit{number of trees =} \{100, 500, 1000, 5000\}
+in each forest. 
 
 
 \subsection{Results and discussion} 
@@ -548,9 +627,9 @@ We thus find that CF performs best in relatively linear response surfaces with s
 \section{Conclusion and Remarks}
 In order to investigate variation in treatment effects through interaction with individual background attributes in survey responses to welfare, Green and Kern settled on BART as their model of choice. However, the estimates provided through BART make policy implementation challenging given their theoretical shortcomings such as the lack of asymptotic theory of its estimates and thus adequate confidence intervals. In this research, we use DML Causal Forests (CF) to model treatment effect heterogeneity and test the robustness of the estimates across variations in tuning and DGP parameters. \\
 
-Our analysis reveals that although the CF estimates are lower on average, the CF-obtained trends of the CATEs across different covariates are largely similar to those obtained by BART. We also find that on top of the six covariates identified as sources of systemic effect heterogeneity by Green and Kern, \textit{work status} and \textit{racial backgrounds} are also potentially significant drivers. We leave further exploration of these variables to a future opportunity. The CATE estimates across different attributes are approximately normally distributed, confirming that we have obtained asymptotic convergence in our sample and therefore a valid confidence interval for our estimates. \\ 
+Our analysis reveals that although the CF estimates are lower on average, the CF-obtained trends of the CATEs across different covariates are largely similar to those obtained by BART. We also find that on top of the six covariates identified as sources of systemic effect heterogeneity by Green and Kern, \textit{work status} and \textit{racial backgrounds} are also potentially significant drivers. We leave further exploration of these variables to a future opportunity. The CATE estimates across different attributes are approximately normally distributed, confirming that we have obtained asymptotic convergence in our sample and therefore a valid confidence interval for our estimates. When varying six different parameters of the DGP and the tree characteristics, we confirm that CF estimates are generally stable across diverse model specifications, and even in relatively smaller sample sizes. CF clearly performs best when the covariates are largely linearly related, and there is some treatment effect heterogeneity present in the model. Our estimates also demonstrate excellent coverage across variations in model parameters. We notice that our model coverage significantly outperforms results suggested in existing literature, and recognize that this may be due to the comparative simplicity of our DGP to other synthetic data (such as ACIC data analysis challenge) ~\cite{dorieACIC}. \\
 
-When varying six different parameters of the DGP and the tree characteristics, we confirm that CF estimates are generally stable across diverse model specifications, and even in relatively smaller sample sizes. CF clearly performs best when the covariates are largely linearly related, and there is some treatment effect heterogeneity present in the model. Our estimates also demonstrate excellent coverage across variations in model parameters. We notice that our model coverage significantly outperforms results suggested in existing literature, and recognize that this may be due to the comparative simplicity of our DGP to other synthetic data (such as ACIC data analysis challenge) ~\cite{dorieACIC}.
+This paper provides promising results on the performance and stability of the CF method, as well as improves on the effect of the question wording as `for the poor' on support for welfare programs. We still leave room for further research, such as identifying CATE based on influential features of the model previously unidentified by Green and Kern, exploring modifications to CF that may allow it to perform well in situations with extreme non-linearity,  and further validating the rate at which convergence of CF estimates occur. With the abundance of adaptations and improvements to the CF method constantly being studied, we are optimistic that we will soon be able to understand economic and social phenomena in a more comprehensive and accurate manner. 
 
 
 
@@ -681,6 +760,31 @@ When varying six different parameters of the DGP and the tree characteristics, w
    	 	\includegraphics[width = \linewidth]{Graphs/s2_nestimator.png}
 	\end{subfigure}
 \end{figure} 
+
+\begin{figure}[!htp]
+\caption{CATE Estimates by Variation in Degrees of Heterogeneity}
+	\centering
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textbf{\textit{j = 0} (Homogeneity)}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_CATEhet0.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textit{j = 2}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_CATEhet2.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {0.49\linewidth}
+	\vspace{0.5cm}
+		\caption{\textit{j = 4}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_CATEhet4.png}
+	\end{subfigure}
+	\begin{subfigure} [h] {0.49\linewidth}
+	\vspace{0.5cm}
+		\caption{\textit{j = 8}}
+   	 	\includegraphics[width = \linewidth]{Graphs/s2_CATEhet8.png}
+	\end{subfigure}
+\end{figure} 
+
+
 
 \clearpage
 \bibliographystyle{abbrv}

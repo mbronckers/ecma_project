@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{athey2019ML}
 S.~Athey and G.~Imbens.
@@ -24,6 +24,11 @@ V.~Chernozhukov, D.~Chetverikov, M.~Demirer, E.~Duflo, C.~Hansen, W.~Newey, and
 H.~A. Chipman, E.~I. George, and R.~E. McCulloch.
 \newblock Bart: Bayesian additive regression trees.
 \newblock 4(1), Mar 2010.
+
+\bibitem{dorieACIC}
+V.~Dorie, J.~Hill, U.~Shalit, M.~Scott, and D.~Cervone.
+\newblock Automated versus do-it-yourself methods for causal inference: Lessons
+  learned from a data analysis competition, 2018.
 
 \bibitem{greenkern2012}
 D.~P. Green and H.~L. Kern.
