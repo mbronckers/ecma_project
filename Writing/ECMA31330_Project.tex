@@ -230,7 +230,7 @@ our data in $80/20$ train/test sets, train our tree using 5-fold cross
 validation (CV), and estimate treatment effects on the remaining test set. For
 inference, the implementation uses a bootstrap-of-little-bags to calculate the
 parameter vector covariance. All other parameters are left to their default
-values.
+values. 
 
 \subsection{Results and analysis}
 We first estimate the ATE without conditioning on any covariates for possible
@@ -530,51 +530,53 @@ be challenging to estimate heterogeneous treatment effects for the lack of data
 points we can estimate adequate counterfactuals on. Figure (\ref{figure:sixd})
 and table (\ref{table:twod}) also shows similar results as modifying the
 propensity score, since the failure of the overlap condition forces some
-individuals to have 0\% change of receiving treatment, and thus creates and
-mismatch in the treatment-control group size. \\
+individuals to have 0\% change of receiving treatment, creating a mismatch in
+the treatment-control group size. \\
 
 As expected, the violation of the overlap assumption does not significantly
 worsen CF performance, although there is some increase in bias, RMSE, and the
-interval length can be noted. This is promising given that the assumption of
-overlap is made for other causal inference models that focus on treatment effect
-heterogeneity, meaning CF could have a relative advantage under scenarios in
-which overlap is violated. Again, it is important to note that the violation of overlap
-was done by forcing half of the observations to have no treatment while the
-other half were assigned treatments probabilistically as per the baseline model.
-An interesting extension would be looking into the performane of CF under a larger amount 
-of overlap violation and how behavior changes under varying degrees of overlap
-violation.\\ 
+interval length. This is promising given that the assumption of overlap is made
+for other causal inference models that focus on treatment effect heterogeneity,
+meaning CF could have a relative advantage in scenarios where overlap is
+violated. Again, it is important to note that the violation of overlap was done
+by forcing half of the observations to have no treatment while the other half
+were assigned treatments probabilistically as per the baseline model. An
+interesting extension would be looking into the performane of CF under a larger
+amount of overlap violation and how behavior changes under varying degrees of
+overlap violation.\\ 
 
 Testing increasing degrees of treatment effect heterogeneity in the model yields
-promising results for the CF:  performance is significantly improved in models
-with some degree of heterogeneity compared to completely homogeneous models. As
+promising results for the CF: performance significantly improves in models with
+some degree of heterogeneity compared to completely homogeneous models. As
 figure (\ref{figure:sixe}) and table (\ref{table:twoe}) suggest, bias and RMSE
-increase slightly with degrees of heterogeneity greater than 2 (there are more
-than 2 features that drive treatment effect heterogeneity in the model), yet the
-change is minute. We see that CF is best fit to assess heterogeneous models and
-is robust to increasing sources of heterogeneity. \\ 
+increase only slightly with degrees of heterogeneity greater than 2 (i.e. there
+$>2$ features that drive treatment effect heterogeneity in the model). We see
+that CF is best fit to assess heterogeneous models and is robust to increasing
+sources of heterogeneity. \\ 
 
-Finally, we also find that the CF produces stable estimates across variations in
+Finally, we find that the CF produces stable estimates across variations in
 the tuning parameter for the number of trees to use. Figure (\ref{figure:sixf})
 and table (\ref{table:twof}) show that the change in bias and RMSE of the
-estimates across increasing \textit{n\_estimator} is small, although the
-interval length decays. We note that the baseline of 1000 trees in the CF in
+estimates when increasing \textit{n\_estimator} is small, although the
+interval length decays. We observe that the baseline of 1000 trees in the CF in
 fact yields the result with the highest bias and RMSE but the smallest interval
-length among the parameter values, reflecting a bias-variance trade off. In
+length among the parameter values, reflecting the bias-variance trade-off. In
 future analyses, it may be worth to explore whether this result changes with
-greater sample sizes. \\
+larger sample sizes. \\
 
-We thus find that CF performs best in relatively linear response surfaces with
-some degree of treatment effect heterogeneity. Overall performance is rather
-stable across different tuning parameters as well as DGP characteristics,
-allowing CF estimates to be reliable in many economic applications. It is
-promising that the CF reaches asymptotic results and shows excellent coverage
-even with smaller sample sizes, given the cost of acquiring large and thorough
-datasets. Moreover, we also note that the model parameters of the welfare GSS
-data in section 2 are in alignment with the condition under which CF yields
-stable results. For example, the welfare GSS data contained over 30,000
-observations with only 120 covariates. This implies that the CATE estimates
-obtained in the earlier section are likely to be reasonable estimates. 
+In conclusion, we find that CF performs best in relatively linear response
+surfaces with some degree of treatment effect heterogeneity. Overall performance
+is rather stable across different tuning parameters as well as DGP
+characteristics, allowing CF estimates to be reliable in many economic
+applications. It is promising that the CF reaches asymptotic results and shows
+excellent coverage and interval widths even with smaller sample sizes, given the
+cost of acquiring large and thorough datasets. Moreover, we also note that the
+model parameters of the welfare GSS data in section 2 are in alignment with the
+condition under which CF yields stable results. For example, the welfare GSS
+data contained over 30,000 observations with only 120 covariates. This implies
+that the CATE estimates obtained in section 2 are likely to be reasonable
+estimates.
+
 
 \begin{table}[H]
 \caption{Model Performance with Parameter Variation}
@@ -704,15 +706,14 @@ CF-obtained trends of the CATEs across different covariates are largely similar
 to those obtained by BART. We also find that on top of the six covariates
 identified as sources of systemic effect heterogeneity by Green and Kern,
 \textit{work status} and \textit{racial backgrounds} are also potentially
-significant drivers. We leave further exploration of these variables to a future
-opportunity. The CATE estimates across different attributes are approximately
-normally distributed, confirming that we have obtained asymptotic convergence in
-our sample and therefore a valid confidence interval for our estimates. When
-varying six different parameters of the DGP and the tree characteristics, we
-confirm that CF estimates are generally stable across diverse model
-specifications, and even in relatively smaller sample sizes. CF clearly performs
-best when the covariates are largely linearly related, and there is some
-treatment effect heterogeneity present in the model. Our estimates also
+significant drivers. The CATE estimates across different attributes are
+approximately normally distributed, confirming that we indeed have obtained
+asymptotic convergence in our sample and therefore a valid confidence interval
+for our estimates. When varying six different parameters of the DGP and the tree
+characteristics, we confirm that CF estimates are generally stable across
+diverse model specifications as well as relatively smaller sample sizes. CF
+clearly performs best when the covariates are largely linearly related and there
+is treatment effect heterogeneity present in the model. Our estimates also
 demonstrate excellent coverage across variations in model parameters. We notice
 that our model coverage significantly outperforms results suggested in existing
 literature~\cite{CarvalhoHahnMurray}. Though our DGP is highly non-linear and
@@ -727,9 +728,9 @@ programs by conditioning on socio-economic factors. We still leave room for
 further research, such as identifying CATE based on influential features of the
 model previously unidentified by Green and Kern, exploring modifications to CF
 that may allow it to perform well in situations with extreme non-linearity, and
-further validating the rate at which convergence of CF estimates occur.
-Moreover, comparisons between more recent versions of BART and DML CF on our
-synthetic DGP would also be of interest.
+evaluating CF's heterogeneous treatment effect estimation under highly sparse
+data. Moreover, comparisons between more recent versions of BART and DML CF on
+our synthetic DGP would also be of interest.
 
 
 \begin{figure}[!htp]
