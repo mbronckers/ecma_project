@@ -44,6 +44,7 @@
 \newcommand{\Corr}{\mathrm{Corr}}
 \newcommand{\Prob}{\mathrm{P}}
 \newcommand{\N}{\text{N}}
+\interfootnotelinepenalty= 10000
 
 \topmargin=-1.5cm \textheight=23cm \oddsidemargin=-0.0cm
 \evensidemargin=-0.0cm \textwidth=16.5cm
@@ -113,7 +114,7 @@ method that models heterogeneous treatment effects flexibly by building on the
 concept of ensembles of trees. Using a Markov Chain Monte Carlo (MCMC) algorithm
 that derives effects from the posterior mean and interval instead of
 pre-specified tree parameters, BART has a much smoother and adaptive structure
-than traditional OLS or single tree models popular in economics, and is also
+than the traditional OLS or single tree models popular in economics and is also
 resilient to problems with overfitting.~\cite{greenkern2012} However, despite its
 excellent predictive capacity, BART lacks an asymptotic explanation for its
 estimates and is not guaranteed to converge in polynomial time
@@ -121,7 +122,7 @@ estimates and is not guaranteed to converge in polynomial time
 recent work by Ročková and Saha (2018) suggests modifications to BART that may
 allow asypmtotic concentration of the posterior mean around the true mean, the
 construction of an asymptotic theory of BART estimates is still an ongoing
-effort.~\cite{rockova2018theory} An alternative method is the Causal Forest (CF),
+effort.~\cite{rockova2018theory} Causal Forest (CF) is an alternative method,
 proposed by Wager and Athey (2017). One of the advantages of CF is that their
 estimates are asymptotically gaussian and unbiased, allowing proper confidence
 intervals to be constructed around the treatment effect. The construction of
@@ -132,41 +133,186 @@ In this paper, we evaluate Causal Forests as a method for heterogeneous
 treatment effect estimation on both empirical and simulated datasets.
 Specifically, we compare the CF method to BART in the estimation of heterogenous
 treatment effects in a survey experiment on welfare opinions from the General
-Social Survey as used by Green and Kern. Green and Kern use the GSS survey dataset with individual perception on public spending. To find the impact of the question phrasing on the responses, they use BART to estimate heterogeneous treatment effects by conditioning on a suite of socioeconomic backgrounds of the respondent. Given
-the theoretical shortcomings of BART and the theoretical benefits of CFs, we
-apply CFs to same problem and empirical dataset and compare it to the authors'
-findings.
+Social Survey as used by Green and Kern. To find the impact of the question
+phrasing on the responses, Green and Kern use BART to estimate heterogeneous
+treatment effects by conditioning on a suite of socioeconomic backgrounds of the
+respondent. Given the theoretical shortcomings of BART and the benefits of CFs,
+we seek to evaluate CFs as alternative method and apply it to the same empirical
+dataset and compare it to the authors' findings. 
 
-In section 2, we fit a CF model on the welfare data and compares our estimates against BART estimates of conditional average treatment effect (CATE) obtained by Green and Kern. Since empirical data offers no ground truth CATEs, we are confined to comparing the methods on interval length and RMSE. In section 3, we remedy this shortcoming with an evaluation of the CF method applied to DGPs that attempt to represent the empirical dataset. Using the ground truth ATE and CATEs of our DGPs, we assess the CF's performance under a variety of different DGP parameters and assess the conditions under which CFs perform well or poorly.
-\\ 
+In section 2, we fit a CF model on the welfare data and compares our estimates
+against BART estimates of both the average treatment effect (ATE) and
+conditional average treatment effect (CATE) obtained by Green and Kern. Since
+empirical data offers no ground truth CATEs, we are confined to comparing the
+methods on interval length and RMSE. In section 3, we remedy this shortcoming
+with an evaluation of the CF method applied to multiple DGPs that attempt to
+represent the empirical dataset. Using the ground truth ATE and CATEs of our
+DGPs, we assess the CF's performance under a variety of different DGP parameters
+and assess the conditions under which CFs perform well or poorly. \\
 
 \section{Causal Forest Estimates of CATE in Welfare Dataset} 
 
 \subsection{Discussion of data and motivation for research} 
-In our analysis below, we use a survey experiment from GSS which is also utilized by Green and Kern to investigate interactions between treatment and covariates that may lead to treatment effect heterogeneity. The experiment was conducted in the mid-1980s by GSS to study the negative sentiment Americans carry toward government programs labeled as "welfare". Due to associations with racial connotations and poorly managed welfare programs, respondents were found much more likely to endorse government spending for "the poor" than for public "welfare".~\cite{rasinski1989}\\
+In our analysis below, we use a survey experiment from GSS (as used by Green and
+Kern) to investigate interactions between treatment and covariates that may lead
+to treatment effect heterogeneity. The experiment was conducted in the mid-1980s
+by GSS to study the negative sentiment Americans carry toward government
+programs labeled as "welfare". Due to associations with racial connotations and
+poorly managed welfare programs, respondents were found much more likely to
+endorse government spending for "the poor" than for public
+"welfare"~\cite{rasinski1989}. The treatment indicator $T_i$ is $1$ if the
+survey question presented to the respondent frames the governmenting spending as
+for the "poor" and $0$ if the survey question frames it as "welfare". The
+outcome variable $Y_i$ is $1$ if the respondent's answer supports government
+spending in response to the survey question and $0$ if the respondent's answer
+does not support it. \\
 
-Using BART, Green and Kern illustrates the extent to which such reaction to the question wording as "welfare" varies based on the respondents' background characteristics such as years of education, race, or political alignment. BART has been a popular choice for heterogeneous treatment effect modeling, as its estimates require little parameter tuning, allow accurate detection of interactions between covariates, and are much smoother than those of single tree models. Each individual tree in the forest has only a small effect on the model, by assuming a prior distribution over the tree parameters.~\cite{Chipman2010} Such lack of any individual influential trees allow regular model fit of the BART set up. Then, a MCMC algorithm is used to sample tree parameters iteratively from the posterior distribution as the model is fit. Though this assumption of prior distribution and back-fitting algorithm allows BART to be relatively invariant across, in the presence of confounding variables and treatment effect heterogeneity, such regularization may severely bias the treatment effect estimates~\cite{CarvalhoHahnMurray}. Moreover, BART estimates still lack theoretical explanation on its asymptotic concentration, making the construction of adequate confidence intervals challenging. 
+Using BART, Green and Kern seek to estimate the extent to which the reaction to
+the question wording of "welfare" varies dependending on the respondent's
+background characteristics, including years of education, race, or political
+alignment. BART has been a popular choice for heterogeneous treatment effect
+modeling as it assumes no specification of the treatment effect, unlike
+parametric methods, and requires little parameter tuning. BART is able to learn
+complex, high-dimensional relationships from the data and detect interactions
+between covariates. Its probabilistic nature prevents overfitting as each
+individual tree in the forest has only a small effect on the model by assuming a
+prior distribution over the tree parameters~\cite{Chipman2010}. The MCMC
+algorithm is used to sample tree parameters iteratively from the posterior
+distribution as the model is fit. We refer to~\cite{Chipman2010} for more
+computational and theoretical details on BART. Though the prior distribution and
+back-fitting algorithm allow BART to be relatively invariant across its
+parameters, in the presence of confounding variables and treatment effect
+heterogeneity such regularization may severely bias the treatment effect
+estimates~\cite{CarvalhoHahnMurray}. Moreover, BART estimates still lack
+theoretical explanation on its asymptotic concentration, making the construction
+of adequate confidence intervals challenging. 
 
 \subsection{Causal forests and model assumptions} 
-For these reasons, we choose to investigate causal forests to estimate the the treatment effect of question wording on welfare program support. Just like BART, causal forests is fit to model non-linear relationships and interactions between covariates. One advantage that causal forests carry over BART is that under weak assumptions, the estimate are asymptotically standard normal distributed with Gaussian confidence intervals.~\cite{atheywager2019}. Put in context of economic policy, the presence of an asymptotic theory allows hypothesis testing regarding treatment results and thus aids policy decisions to be made. \\
+% we need to refer to the original CF paper for a "complete treatment".
+For these reasons, we seek to investigate CFs as alternative method to BART in
+treatment effect heterogeneity estimation. Just like BART, CF is able to model
+highly non-linear relationships and interactions between covariates. One
+advantage that CFs have over BART is that under weak assumptions, the estimates
+are asymptotically standard normal distributed with Gaussian confidence
+intervals~\cite{atheywager2019}. In the context of economic policy making, the
+presence of an asymptotic theory allows for hypothesis testing on treatment
+effects--aiding policy decision making. \\
 
-Causal forests are a specific form of generalized random forests (GRF), which uses adaptive sample splitting criterion taking into account the MSE. To avoid overfitting and reduce bias in the estimates, we also ensure that the tree is 'honest' - the subsample with which we grow a tree is disparate from the subsample with which we drop down and obtain predictions. 
-Additionally, we also note that although causal forests uncover heterogeneous treatment effects with valid confidence intervals for statistical inference, it does not necessarily address the affect of confounding due to the regularization on our trees. The terminal leaves of our tree are not homogenous across covariates for the sake of lowering variance and thus increasing precision, but with confounding within the leaves, we cannot guarantee that our treatment effect estimates will be unbiased. We thus use the Double/Debiased Machine Learning method (DML) for causal forests proposed by Chernozhukov et al. (2016) that uses orthogonalized treatment on covariates to estimate the treatment effect.~\cite{DML} We achieve this through the \textit{CausalForestDML} function. In our model, we use 80\% of the welfare data to build our tree and estimate treatment effects on the rest with a 5-fold CV for parameters of the model. \\ 
+Causal forests are a specific form of generalized random forests (GRF), which
+uses adaptive sample splitting criterion taking into account the MSE. To avoid
+overfitting and reduce bias in the estimates, we also ensure that the tree is
+'honest' - the subsample with which we grow a tree is disparate from the
+subsample with which we drop down and obtain predictions. Additionally, we also
+note that although causal forests uncover heterogeneous treatment effects with
+valid confidence intervals for statistical inference, it does not necessarily
+address the affect of confounding due to the regularization on our trees. The
+terminal leaves of our tree are not homogenous across covariates for the sake of
+lowering variance and thus increasing precision, but with confounding within the
+leaves, we cannot guarantee that our treatment effect estimates will be
+unbiased. We consequently use the Double/Debiased Machine Learning method (DML) for
+causal forests, as proposed by Chernozhukov et al. (2016), which uses orthogonalized
+treatment on covariates to estimate the treatment effect~\cite{DML}. 
+% say why this guarantees unbiasedness of our estimator (the problem of normal CF)
+\\
 
-\subsection{Results of analysis and explanation}
-We first investigate the average treatment effects (ATE) without conditioning on any covariates for possible effect heterogeneity. We obtain an ATE of 0.336, with a standard deviation of 0.049 and a 95\% confidence interval of (0.256, 0.416). Green and Kern (2012) identified seven variables to condition the treatment effects on: \textit{party identification, political views, age, education, negative attitude towards Blacks}, and \textit{survey year}. Figure 1 displays the CATE estimates obtained by the causal forest model conditional on each of the seven variables. The blue areas represent the 95\% confidence intervals of our estimates. \\
+For our evaluation, we use the \textit{CausalForestDML} from the \texttt{econml}
+package. The method fits the estimators for fitting the response to the features
+and the treatment to the features in a first stage cross-fitting manner, using a
+\texttt{WeightedLassoCV} and \texttt{LogisticRegression CV} respectively on
+discrete treatment. Afterwards, it fits a forest of trees to solve a local
+moment equation that involves the residualization of the treatment and outcome
+variables. We default to using $1000$ honestly-trained trees in our CF and each
+tree splits to maximize the pure parameter heterogeneity score, which serves as
+approximation to the ideal heterogeneity score as described
+in~\cite{athey2018grf}. We also maximize the number of samples in each subsample
+that is used to train every tree by setting $max\_samples$ to $0.5$. We split
+our data in $80/20$ train/test sets, train our tree using 5-fold cross
+validation (CV), and estimate treatment effects on the remaining test set. For
+inference, the implementation uses a bootstrap-of-little-bags to calculate the
+parameter vector covariance. All other parameters are left to their default
+values. 
 
-The top two graphs represents CATE as a function of party identification and self-identified political alignment from liberal to conservative. We see around 5 and 3 percentage points difference in the effect of question wording on support for welfare spending between strong Republicans-Democrats and Conservative-Liberals, respectively, controlling for all other covariates. Conservatives and strong Republicans are more likely to be affected by the framing of the survey question as for welfare. The treatment effect conditional on age, on the other hand, is greatest for those in their 30-40s, and diminishes past that age group. The negative bias toward Blacks has a less pronounced moderation on the treatment effect than the BART estimates.  We note that the trends in CATE estimates obtained via causal forest are generally similar to those obtained using BART for most of the covariate groups except education. There seems to be an increasing effect of question wording as the responded receives greater years of education, with the effect peaking at around 11-13 years (with college education). Whereas Green and Kern found no distinct moderation of treatment effects based on education, we find that there is around 5 percentage point difference in treatment effect estimates between those who received no education and those who received post-Graduate education. This indicates that more educated individuals respond more favorably to the question worded as 'assistance to the poor'. Lastly, we examine that change in CATE through time (survey year) and find that the treatment effect was strongest during years 1993-1996. Our results once again largely agree with the results obtained through BART, and illustrate that response to "welfare" is highly associated with the respondent's personal background characteristics. \\
+\subsection{Results and analysis}
+We first estimate the ATE without conditioning on any covariates for possible
+effect heterogeneity. For the CATEs estimation, we follow Green and Kern's assessment. They estimate
+CATEs with respect to seven variables to condition the treatment effects on:
+\textit{party identification, political views, age, education, negative attitude
+towards blacks}, and \textit{survey year}. For a complete overview of their
+results, please refer to our appendix. \\ 
 
-We note that our CATE estimates from causal forest are on average lower than those of BART. The higher estimates of the BART estimates can be attributed to the regularization-induced confounding (RIC) identified by Hahn, Murray, and Carvalho (2019).\cite{CarvalhoHahnMurray} The treatment effect in BART is obtained by taking the conditional expectation of the outcome conditional on treatment and certain covariates: $E[Y|x,Z = 1] - E[Y|x,Z = 0]$, which in the presence of confounding in finite sample size, outcome may be dependent mostly on x rather than the treatment Z. RIC thus states that the obtained CATEs are heavily dependent on the regularization by the prior distribution in samples of defined sizes. \\
+We find an estimated ATE of 0.336, with a standard deviation of 0.049 and a 95\%
+confidence interval (CI) of (0.256, 0.416). This means that independent of the respondent's background, the framing of government spending for the poor gets estimated 33.6\% greater approval vis\-à\-vis framing it as public welfare spending. This is in line with Green and
+Kern's estimated ATE of 0.364. Since BART does not offer CIs and only posterior
+intervals, the presented ATE posterior interval by Green and Kern is not directly
+comparable to our confidence interval. 
+\\
 
-Figure 2 shows the overall presence of treatment effect heterogeneity in the sample. The histogram shows that treatment effect ranges from 10 percentage points to 52 percentage points, with the median estimated CATE of 34 percentage points. We note that compared to the BART median of 37 percentage points, we again obtain lower estimates on average. All estimates of CATE were positive, indicating that although the degrees of the response varies based on personal background covariates, all respondents react more favorably to a question framed for 'the poor' than for 'welfare'. \\
+Figure 1 shows the estimated CATEs conditional on each of the seven variables
+obtained by our CF model. The blue areas represent the 95\% CIs of our
+estimates.\footnote{Note that the bands of the Green and Kern results in the appendix are \%posterior intervals and \textit{not} confidence intervals.}
+The upper two graphs of figure 1 present CATEs as a function of \textit{party
+identification} and self-identified \textit{political alignment}. Controlling
+for all other covariates, we see an absolute 5\% and 3\% percentage points
+difference in the CATE when conditioned on \textit{party identification} and
+\textit{political alignment}, respectively. This means that there is a 5\%
+increase in treatment effect for strong Republicans versus strong Democrats and
+3\% increase for conservatives versus liberals. In other words, we see a 5\% and
+3\% difference in the effect of question wording on support for welfare spending
+between strong Republicans-Democrats and Conservative-Liberals, respectively.
+Conservatives and strong Republicans are more likely to be negatively affected
+(unsupportive) by the framing of the survey question as government spending for
+welfare. The CATE conditional on \textit{age} is greatest for those in their 30
+to 40s, and diminishes past that age group. The \textit{negative bias toward
+blacks} has a less pronounced moderation on the treatment effect than the BART
+estimates. The CATE across time (\textit{survey year}) was strongest during
+years 1993-1996. These estimates are all in line with the CATE estimates
+presented by Green and Kern using BART. \\
 
-\textbf{Add Interpretation of results, Comparison to BART (Bias, RMSE, Coverage, Int length)?? TBD} 
+However, our CATE estimates conditional on \textit{education} are different from
+those of Green and Kern. There seems to be an increasing effect of question
+wording as the respondent has more years of education, with the effect peaking
+at around 11-13 years (i.e. a college education). Whereas Green and Kern found
+no distinct moderation of treatment effects based on education, we find that
+there is around a 5\% percentage point difference in treatment effect estimates
+between those who received no education and those who received post-Graduate
+education. This indicates that more educated individuals respond more favorably
+to the question worded as "assistance to the poor". \\
 
+On average, our CF-obtained CATE estimates are lower than those using BART. The
+higher estimates of the BART estimates can be attributed to the
+regularization-induced confounding (RIC) as identified by Hahn, Murray, and
+Carvalho (2019)~\cite{CarvalhoHahnMurray}. The treatment effect in BART is
+obtained by taking the conditional expectation of the outcome conditional on
+treatment and certain covariates: $E[Y|x,Z = 1] - E[Y|x,Z = 0]$. In the presence
+of confounding in finite sample sizes, this may be dependent mostly on $x$
+rather than the treatment $Z$. RIC consequently states that the BART-obtained
+CATEs are heavily dependent on the regularization by the prior distribution
+specified in finite-size samples. \\
+
+Figure 2 shows the overall presence of treatment effect heterogeneity in the
+sample. The histogram shows that treatment effect ranges from 10 percentage
+points to 52 percentage points, with the median estimated CATE of 34 percentage
+points. We note that compared to the BART median of 37 percentage points, we
+again obtain lower estimates on average. All estimates of CATE were positive,
+indicating that although the degrees of the response varies based on personal
+background covariates, all respondents react more favorably to a question framed
+for 'the poor' than for 'welfare'. \\
+
+To conclude, our results largely agree with the results obtained through BART
+and illustrate that the effect of question phrasing on government spending is
+highly heterogeneous and depends on the respondent's background. We also find
+slightly lower CATE estimates using CF as estimator relative to BART, which
+could be because of BART's regularization-induced confounding. \\ 
 
 \subsection{Suggestions for further analysis}
-The causal forests approach also allows us to gauge covariate importance by calculating SHAP values, as indicated in figure 3.  We note that aside from the covariates estimated by Green and Kern, we find that variables as work status and racial backgrounds are also significant in the model. Although in this paper we limit the scope of our research to comparisons with the authors' estimates through BART, it may be meaningful in future research to estimate CATE conditional on those variables. \\
+We are also able to assess covariate importance by calculating SHAP values, as
+indicated in figure 3, using the CF implementation of \texttt{econml}. Aside
+from the covariates estimated by Green and Kern, we find that the covariates
+\textit{work status} and \textit{racial backgrounds} are also significant in our
+fitted CF model. Although our scope is limited to comparisons of CF-obtained
+CATE estimates with the Green and Kern's BART-obtained estimates, it may be of
+interest to estimate CATE conditional on those additional covariates with CF and
+BART in future lines of research. 
 
 
 
@@ -280,8 +426,11 @@ Our test of CF robustness across varying degrees of linearity in the response su
 
 The analysis of model resilience across imbalanced treatment and control group size behaves as initially predicted: figure (6-c) and table (2-c) show bias and RMSE is minimized at a 50/50 split between control and treatment. An interesting result is that with significant differences in group size, the CF performs better when we have a 10/90 split treatment-control than when there is a 90/10 split. Observing very few treatment cases yields more favorable results than observing very few control group cases, perhaps as it yields more conservatives estimates of the treatment effect. We also note that in situations with such extreme imbalance in group sizes, it may be challenging to estimate heterogeneous treatment effects for the lack of data points we can estimate adequate counterfactuals on. Figure (6-d) and table (2-d) also shows similar results as modifying the propensity score, since the failure of the overlap condition forces some individuals to have 0\% change of receiving treatment, and thus creates and mismatch in the treatment-control group size. As expected, the violation of the overlap assumption does not significantly worsen CF performance, although there is some increase in bias, RMSE, and the interval length can be noted. \\ 
 
-Testing increasing degrees of treatment effect heterogeneity in the model yields promising results for the CF, as performance is significantly improved with some degree of heterogeneity compared to complete homogeneity. 
+Testing increasing degrees of treatment effect heterogeneity in the model yields promising results for the CF:  performance is significantly improved in models with some degree of heterogeneity compared to completely homogeneous models. As figure (6-e) and table (2-e) suggest, bias and RMSE increase slightly with degrees of heterogeneity greater than 2 (there are more than 2 features that drive treatment effect heterogeneity in the model), yet the change is minute. We see that CF is best fit to assess heterogeneous models and is robust to increasing sources of heterogeneity. \\ 
 
+Finally, we also find that the CF produces stable estimates across variations in the tuning parameter. Figure (6-f) and table (2-f) show that the change in bias and RMSE of the estimates across increasing \textit{n\_estimator} is small, although the interval length decays. We note that the baseline of 1000 trees in the CF in fact yields the result with the highest bias and RMSE but the smallest interval length among the parameter values, reflecting a bias-variance trade off. In future analyses, it may be worth to explore whether this result changes with greater sample sizes. \\
+
+We thus find that CF performs best in relatively linear response surfaces with some degree of treatment effect heterogeneity. Overall performance is rather stable across different tuning parameters as well as DGP characteristics, allowing CF estimates to be reliable in many economic applications. It is promising that the CF reaches asymptotic results and shows excellent coverage even with smaller sample sizes, given the cost of acquiring large and thorough datasets. Moreover, we also note that the model parameters of the welfare GSS data in section 2 are in alignment with the condition under which CF yields stable results. This implies that the CATE estimates obtained in the earlier section are likely to be reasonable estimates. 
 
 \begin{table}
 \caption{Model Performance with Parameter Variation}
@@ -395,9 +544,20 @@ Testing increasing degrees of treatment effect heterogeneity in the model yields
 
 
 
+\clearpage
+\section{Conclusion and Remarks}
+In order to investigate variation in treatment effects through interaction with individual background attributes in survey responses to welfare, Green and Kern settled on BART as their model of choice. However, the estimates provided through BART make policy implementation challenging given their theoretical shortcomings such as the lack of asymptotic theory of its estimates and thus adequate confidence intervals. In this research, we use DML Causal Forests (CF) to model treatment effect heterogeneity and test the robustness of the estimates across variations in tuning and DGP parameters. \\
 
-\section{Conclusion}
-WRITESOME SHIT\\
+Our analysis reveals that although the CF estimates are lower on average, the CF-obtained trends of the CATEs across different covariates are largely similar to those obtained by BART. We also find that on top of the six covariates identified as sources of systemic effect heterogeneity by Green and Kern, \textit{work status} and \textit{racial backgrounds} are also potentially significant drivers. We leave further exploration of these variables to a future opportunity. The CATE estimates across different attributes are approximately normally distributed, confirming that we have obtained asymptotic convergence in our sample and therefore a valid confidence interval for our estimates. \\ 
+
+When varying six different parameters of the DGP and the tree characteristics, we confirm that CF estimates are generally stable across diverse model specifications, and even in relatively smaller sample sizes. CF clearly performs best when the covariates are largely linearly related, and there is some treatment effect heterogeneity present in the model. Our estimates also demonstrate excellent coverage across variations in model parameters. We notice that our model coverage significantly outperforms results suggested in existing literature, and recognize that this may be due to the comparative simplicity of our DGP to other synthetic data (such as ACIC data analysis challenge) ~\cite{dorieACIC}.
+
+
+
+
+
+
+
 
 
 
@@ -410,29 +570,37 @@ WRITESOME SHIT\\
 	\begin{subfigure} [h] {0.45\linewidth}
 	\caption{\textbf{Party Identification}}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_partyid.png}
+		\vspace{0.5cm}
 	\end{subfigure}
 	\begin{subfigure} [h] {0.45\linewidth}
 		\caption{\textbf{Political Views}}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_polyview.png}
+		\vspace{0.5cm}
 	\end{subfigure}}
 \resizebox*{\textwidth}{!}{
 	\begin{subfigure} [h] {0.45\linewidth}
 	\caption{\textbf{Age }}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_age.png}
+		\vspace{0.5cm}
 	\end{subfigure}
 	\begin{subfigure} [h] {0.45\linewidth}
 		\caption{\textbf{Education Received}}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_educ.png}
+		\vspace{0.5cm}
 	\end{subfigure}}
 \resizebox*{\textwidth}{!}{
 	\begin{subfigure} [h] {0.45\linewidth}
 	\caption{\textbf{Attitude Toward Blacks}}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_attblack.png}
+		\vspace{0.5cm}
 	\end{subfigure}
 	\begin{subfigure} [h] {0.45\linewidth}
 		\caption{\textbf{Survey Year}}
    	 	\includegraphics[width = \linewidth]{Graphs/s1_year.png}
+		\vspace{0.5cm}
 	\end{subfigure}}
+\footnotesize
+\emph{Notes:}  Each y-axis shows the estimated CATE conditioned on the covariate, each x-axis represents the range of covariate values for which the CATE was estimated.
 \end{figure} 
 
 \begin{figure}[!htp]
@@ -450,27 +618,31 @@ WRITESOME SHIT\\
 \begin{figure}[!htp]
 \caption{Estimated vs. Actual CATE across Race Groups}
 	\centering
-	\begin{subfigure} [h] {0.45\linewidth}
-		\caption{\textbf{2000 Samples}}
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textbf{1000 Samples}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_race2000.png}
 	\end{subfigure}
-	\begin{subfigure} [h] {0.45\linewidth}
-		\caption{\textbf{60000 Samples}}
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textbf{30000 Samples}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_race60000.png}
 	\end{subfigure}
+\footnotesize
+\emph{Notes:}  y-axis is the CATE, x-axis the range of covariate values split into bins on which CATE is estimated. The red line is the true CATE and blue line is the estimate CATE with the shaded area representing the 95\% CI.
 \end{figure} 
 
 \begin{figure}[!htp]
 \caption{Estimated vs. Actual CATE across Education Level}
 	\centering
-	\begin{subfigure} [h] {0.45\linewidth}
-		\caption{\textbf{2000 Samples}}
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textbf{1000 Samples}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_educ2000.png}
 	\end{subfigure}
-	\begin{subfigure} [h] {0.45\linewidth}
-		\caption{\textbf{60000 Samples}}
+	\begin{subfigure} [h] {0.49\linewidth}
+		\caption{\textbf{30000 Samples}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_educ60000.png}
 	\end{subfigure}
+\footnotesize
+\emph{Notes:}  y-axis is the CATE, x-axis the range of covariate values split into bins on which CATE is estimated. The red line is the true CATE and blue line is the estimate CATE with the shaded area representing the 95\% CI.
 \end{figure} 
 
 \begin{figure}[!htp]

@@ -2,7 +2,7 @@
 \BOOKMARK [1][-]{section.2}{Causal Forest Estimates of CATE in Welfare Dataset}{}% 2
 \BOOKMARK [2][-]{subsection.2.1}{Discussion of data and motivation for research}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Causal forests and model assumptions}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Results of analysis and explanation}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{Results and analysis}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{Suggestions for further analysis}{section.2}% 6
 \BOOKMARK [1][-]{section.3}{Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{}% 7
 \BOOKMARK [2][-]{subsection.3.1}{Baseline DGP specification}{section.3}% 8
@@ -15,5 +15,5 @@
 \BOOKMARK [3][-]{subsubsection.3.3.5}{Degree of treatment effect heterogeneity}{subsection.3.3}% 15
 \BOOKMARK [3][-]{subsubsection.3.3.6}{Number of estimators}{subsection.3.3}% 16
 \BOOKMARK [2][-]{subsection.3.4}{Results and discussion}{section.3}% 17
-\BOOKMARK [1][-]{section.4}{Conclusion}{}% 18
+\BOOKMARK [1][-]{section.4}{Conclusion and Remarks}{}% 18
 \BOOKMARK [1][-]{appendix.A}{References from Green and Kern \(2012\) }{}% 19
