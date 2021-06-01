@@ -112,7 +112,7 @@ constructed around treatment effect estimates conditional on multiple
 covariates--leading to the broader adoption of these methods~\cite{athey2019ML}. \\
 
 One such method is Bayesian Additive Regression Trees (BART), a non-parametric
-method that models heterogeneous treatment effects flexibly by building on the
+approach that models heterogeneous treatment effects flexibly by building on the
 concept of ensembles of trees. Using a Markov Chain Monte Carlo (MCMC) algorithm
 that derives effects from the posterior mean and interval instead of
 pre-specified tree parameters, BART has a much smoother and adaptive structure
@@ -120,29 +120,29 @@ than the traditional OLS or single tree models popular in economics and is also
 resilient to problems with overfitting~\cite{greenkern2012}. However, despite its
 excellent predictive capacity, BART lacks an asymptotic explanation for its
 estimates and is not guaranteed to converge in polynomial time
-\cite{atheywager2019}, weakening its effectiveness as inference tool. Though
-recent work by Ročková and Saha (2018) suggests modifications to BART that may
+\cite{atheywager2019}, weakening its effectiveness as an inference tool. Though
+recent work by Rockova and Saha (2018) suggests modifications to BART that may
 allow asypmtotic concentration of the posterior mean around the true mean, the
 construction of an asymptotic theory of BART estimates is still an ongoing
 effort~\cite{rockova2018theory}. Causal Forest (CF) is an alternative method,
-proposed by Wager and Athey (2017). One of the advantages of CF is that their
+proposed by Wager and Athey (2017). One of the advantages of CF is that its
 estimates are asymptotically gaussian and unbiased, allowing proper confidence
 intervals to be constructed around the treatment effect. The construction of
 adequate confidence intervals is especially relevant in policy applications, as
-consistent estimates can be produced for the treatment group~\cite{atheywager2019}. \\ 
+it would allow decision makers to better assess policy impact~\cite{atheywager2019}. \\ 
 
 In this paper, we evaluate Causal Forests as a method for heterogeneous
 treatment effect estimation on both empirical and simulated datasets.
 Specifically, we compare the CF method to BART in the estimation of heterogenous
 treatment effects in a survey experiment on welfare opinions from the General
-Social Survey as used by Green and Kern. To find the impact of the question
+Social Survey (GSS) as used by Green and Kern. To find the impact of the question
 phrasing on the responses, Green and Kern use BART to estimate heterogeneous
 treatment effects by conditioning on a suite of socioeconomic backgrounds of the
 respondent. Given the theoretical shortcomings of BART and the benefits of CFs,
-we seek to evaluate CFs as alternative method and apply it to the same empirical
+we seek to evaluate CFs as an alternative method and apply it to the same empirical
 dataset and compare it to the authors' findings. \\
 
-In section 2, we fit a CF model on the welfare data and compares our estimates
+In section 2, we fit a CF model on the welfare data and compare our estimates
 against BART estimates of both the average treatment effect (ATE) and
 conditional average treatment effect (CATE) obtained by Green and Kern. Since
 empirical data offers no ground truth CATEs, we are confined to comparing the
@@ -159,21 +159,21 @@ In our analysis below, we use a survey experiment from GSS (as used by Green and
 Kern) to investigate interactions between treatment and covariates that may lead
 to treatment effect heterogeneity. The experiment was conducted in the mid-1980s
 by GSS to study the negative sentiment Americans carry toward government
-programs labeled as "welfare". Due to associations with racial connotations and
+programs labeled as `welfare'. Due to associations with racial connotations and
 poorly managed welfare programs, respondents were found much more likely to
-endorse government spending for "the poor" than for public
-"welfare"~\cite{rasinski1989}. The treatment indicator $T_i$ is $1$ if the
+endorse government spending for `the poor' than for public
+`welfare'~\cite{rasinski1989}. The treatment indicator $T_i$ is $1$ if the
 survey question presented to the respondent frames the government spending as
-for the "poor" and $0$ if the survey question frames it as "welfare". The
+for the `poor' and $0$ if the survey question frames it as `welfare'. The
 outcome variable $Y_i$ is $1$ if the respondent's answer supports government
 spending in response to the survey question and $0$ if the respondent's answer
 does not support it. \\
 
 Using BART, Green and Kern seek to estimate the extent to which the reaction to
-the question wording of "welfare" varies depending on the respondent's
+the question wording of `welfare" varies depending on the respondent's
 background characteristics, including years of education, race, or political
 alignment. BART has been a popular choice for heterogeneous treatment effect
-modeling as it assumes no specification of the treatment effect, unlike
+modeling as it assumes no specification of the treatment effect unlike
 parametric methods, and requires little parameter tuning. BART is able to learn
 complex, high-dimensional relationships from the data and detect interactions
 between covariates. Its probabilistic nature prevents overfitting as each
@@ -184,14 +184,14 @@ distribution as the model is fit. We refer to~\cite{Chipman2010} for more
 computational and theoretical details on BART. Though the prior distribution and
 back-fitting algorithm allow BART to be relatively invariant across its
 parameters, in the presence of confounding variables and treatment effect
-heterogeneity such regularization may severely bias the treatment effect
+heterogeneity, such regularization may severely bias the treatment effect
 estimates~\cite{CarvalhoHahnMurray}. Moreover, BART estimates still lack
 theoretical explanation on its asymptotic concentration, making the construction
 of adequate confidence intervals challenging. 
 
 \subsection{Causal forests and model assumptions} 
 % we need to refer to the original CF paper for a "complete treatment".
-For these reasons, we seek to investigate CFs as alternative method to BART in
+For these reasons, we seek to investigate CFs as an alternative method to BART in
 treatment effect heterogeneity estimation. Just like BART, CF is able to model
 highly non-linear relationships and interactions between covariates. One
 advantage that CFs have over BART is that under weak assumptions, the estimates
@@ -203,7 +203,7 @@ effects--aiding policy decision making. \\
 CFs are a specific form of generalized random forests (GRF), which
 uses adaptive sample splitting criterion taking into account the MSE. To avoid
 overfitting and reduce bias in the estimates, we also ensure that the tree is
-'honest' - the subsample with which we grow a tree is disparate from the
+`honest' - the subsample with which we grow a tree is disparate from the
 subsample with which we drop down and obtain predictions. Additionally, we also
 note that although CFs uncover heterogeneous treatment effects with
 valid confidence intervals for statistical inference, they does not necessarily
@@ -241,7 +241,7 @@ towards blacks}, and \textit{survey year}. For a complete overview of their
 results, please refer to our appendix. \\ 
 
 We find an estimated ATE of 0.336, with a standard deviation of 0.049 and a 95\%
-confidence interval (CI) of (0.256, 0.416). This means that independent of the respondent's background, the framing of government spending for the poor gets estimated 33.6\% greater approval vis\-à\-vis framing it as public welfare spending. This is in line with Green and
+confidence interval (CI) of (0.256, 0.416). This means that independent of the respondent's background, the framing of government spending as `for the poor' gets estimated 33.6\% greater approval vis\-à\-vis framing it as public welfare spending. This is in line with Green and
 Kern's estimated ATE of 0.364. Since BART does not offer CIs and only posterior
 intervals, the presented ATE posterior interval by Green and Kern is not directly
 comparable to our confidence interval. 
@@ -265,7 +265,7 @@ welfare. The CATE conditional on \textit{age} is greatest for those in their 30
 to 40s, and diminishes past that age group. The \textit{negative bias toward
 blacks} has a less pronounced moderation on the treatment effect than the BART
 estimates. The CATE across time (\textit{survey year}) was strongest during
-years 1993-1996. These estimates are all in line with the CATE estimates
+years 1993-1996. These estimates are all in agreement with the CATE estimates
 presented by Green and Kern using BART. \\
 
 However, our CATE estimates conditional on \textit{education} are different from
@@ -276,7 +276,7 @@ no distinct moderation of treatment effects based on education, we find that
 there is around a 5\% percentage point difference in treatment effect estimates
 between those who received no education and those who received post-Graduate
 education. This indicates that more educated individuals respond more favorably
-to the question worded as "assistance to the poor". \\
+to the question worded as `assistance to the poor". \\
 
 On average, our CF-obtained CATE estimates are lower than those using BART. The
 higher estimates of the BART estimates can be attributed to the
@@ -296,7 +296,7 @@ points. We note that compared to the BART median of 37 percentage points, we
 again obtain lower estimates on average. All estimates of CATE were positive,
 indicating that although the degrees of the response varies based on personal
 background covariates, all respondents react more favorably to a question framed
-for 'the poor' than for 'welfare'. \\
+for `the poor' than for `welfare'. \\
 
 To conclude, our results largely agree with the results obtained through BART
 and illustrate that the effect of question phrasing on government spending is
@@ -350,7 +350,7 @@ DGP, we evaluate the estimated ATE and CATEs conditioned on two covariates (one
 involved in treatment effect heterogeneity, the other not) against their ground
 truth values. In doing so, we assess whether the model accurately captures the
 heterogeneity, or possible lack thereof, when the covariate of interest is
-significant/insignificant with respect to the treatment effect. 
+significant/insignificant with respect to the treatment effect. \\
 
 We selected the covariate of interest involved in treatment effect heterogeneity
 to be \textit{race} of the respondent, chosen from the important features based
@@ -531,25 +531,22 @@ points we can estimate adequate counterfactuals on. Figure (\ref{figure:sixd})
 and table (\ref{table:twod}) also shows similar results as modifying the
 propensity score, since the failure of the overlap condition forces some
 individuals to have 0\% change of receiving treatment, creating a mismatch in
-the treatment-control group size. \\
-
-As expected, the violation of the overlap assumption does not significantly
+the treatment-control group size. As expected, the violation of the overlap assumption does not significantly
 worsen CF performance, although there is some increase in bias, RMSE, and the
 interval length. This is promising given that the assumption of overlap is made
 for other causal inference models that focus on treatment effect heterogeneity,
 meaning CF could have a relative advantage in scenarios where overlap is
 violated. Again, it is important to note that the violation of overlap was done
 by forcing half of the observations to have no treatment while the other half
-were assigned treatments probabilistically as per the baseline model. An
-interesting extension would be looking into the performane of CF under a larger
-amount of overlap violation and how behavior changes under varying degrees of
-overlap violation.\\ 
+was assigned treatments probabilistically as per the baseline model. It would be
+interesting to extend this paper to test the performance and behavior of CFs under a greater
+degree of overlap violation.\\ 
 
 Testing increasing degrees of treatment effect heterogeneity in the model yields
 promising results for the CF: performance significantly improves in models with
 some degree of heterogeneity compared to completely homogeneous models. As
 figure (\ref{figure:sixe}) and table (\ref{table:twoe}) suggest, bias and RMSE
-increase only slightly with degrees of heterogeneity greater than 2 (i.e. there
+increase only slightly with degrees of heterogeneity greater than 2 (i.e. there are
 $>2$ features that drive treatment effect heterogeneity in the model). We see
 that CF is best fit to assess heterogeneous models and is robust to increasing
 sources of heterogeneity. \\ 
