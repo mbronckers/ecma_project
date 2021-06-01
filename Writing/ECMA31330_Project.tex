@@ -249,7 +249,7 @@ intervals, the presented ATE posterior interval by Green and Kern is not directl
 comparable to our confidence interval. 
 \\
 
-Figure 1 shows the estimated CATEs conditional on each of the seven variables
+Figure (\ref{figure:one}) shows the estimated CATEs conditional on each of the seven variables
 obtained by our CF model. The blue areas represent the 95\% CIs of our
 estimates.\footnote{Note that the bands of the Green and Kern results in the appendix are \%posterior intervals and \textit{not} confidence intervals.}
 The upper two graphs of figure 1 present CATEs as a function of \textit{party
@@ -291,7 +291,7 @@ rather than the treatment $Z$. RIC consequently states that the BART-obtained
 CATEs are heavily dependent on the regularization by the prior distribution
 specified in finite-size samples. \\
 
-Figure 2 shows the overall presence of treatment effect heterogeneity in the
+Figure (\ref{figure:two}) shows the overall presence of treatment effect heterogeneity in the
 sample. The histogram shows that treatment effect ranges from 10 percentage
 points to 52 percentage points, with the median estimated CATE of 34 percentage
 points. We note that compared to the BART median of 37 percentage points, we
@@ -308,7 +308,7 @@ could be because of BART's regularization-induced confounding. \\
 
 \subsection{Suggestions for further analysis}
 We are also able to assess covariate importance by calculating SHAP values, as
-indicated in figure 3, using the CF implementation of \texttt{econml}. Aside
+indicated in figure (\ref{figure:three}), using the CF implementation of \texttt{econml}. Aside
 from the covariates estimated by Green and Kern, we find that the covariates
 \textit{work status} and \textit{racial backgrounds} are also significant in our
 fitted CF model. Although our scope is limited to comparisons of CF-obtained
@@ -363,10 +363,9 @@ sample size of $N = 1000$ and $N = 30\,000$ to check for convergence of our
 estimates. Due to computational constraints, we only ran the estimation of CATEs
 on the simulated data once. \\ 
 
-Figures (4) and (5) demonstrate the convergence of estimates to the true CATE as
+Figures (\ref{figure:four}) and (\ref{figure:five}) demonstrate the convergence of estimates to the true CATE as
 sample size increases. It is clear that the CATE estimates conditional on race
-and education converge and the estimates are smoothed out asymptotically. Table
-(1) details our results, and here it is clear that the CF estimates are more
+and education converge and the estimates are smoothed out asymptotically. Table (\ref{table:one}) details our results, and here it is clear that the CF estimates are more
 biased when the covariate on which CATE is conditioned is not actually a
 significant source of treatment effect heterogeneity. We also observe our
 overall interval lengths to be considerably greater, indicating reduced
@@ -378,7 +377,7 @@ CATEs with wider CIs when the covariate of interest is not actually the source
 of treatment effect heterogeneity. \\ 
 
 \begin{table}
-\caption{CF Performance on Estimating CATEs for Covariates Responsible/Not Responsible for Treatment Effect Heterogeneity in Baseline Model \\ (Sample Size 30000)}
+\caption{\label{table:one} CF Performance on Estimating CATEs for Covariates Responsible/Not Responsible for Treatment Effect Heterogeneity in Baseline Model \\ (Sample Size 30000)}
 \centering
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{lc|ccccccc}
@@ -499,15 +498,15 @@ in each forest.
 
 \subsection{Results and discussion} 
 
-Figure (6-a) and Table (2-a) illustrate the parameter resilience of causal forest ATE estimates for our specified DGP across the six parameters we have varied. We confirm that both bias and variance of our CF estimates improve with increasing sample size. The concave trend of the bias and variance also suggest that increasing sample size does improve CF performance, yet the improvement in the model marginally diminishes. Note coverage is 1 for all values of N we chose, indicating that the CF obtains asymptotic results pretty quickly even with relatively smaller sample sizes. \\ 
+Figure (\ref{figure:sixa}) and Table (\ref{table:twoa}) illustrate the parameter resilience of causal forest ATE estimates for our specified DGP across the six parameters we have varied. We confirm that both bias and variance of our CF estimates improve with increasing sample size. The concave trend of the bias and variance also suggest that increasing sample size does improve CF performance, yet the improvement in the model marginally diminishes. Note coverage is 1 for all values of N we chose, indicating that the CF obtains asymptotic results pretty quickly even with relatively smaller sample sizes. \\ 
 
-Our test of CF robustness across varying degrees of linearity in the response surface, on the other hand, reveals that the CF is relatively stable across non-linear situations, but breaks down in situations with extremely low linearity. Figure (6-b) and Table (2-b) demonstrates this, and we observe the bias and variance of the estimates dramatically increase when the degree of linearity is `low' (\textit{i} = 8). In this case, we have a total of 156 high-dimensional interaction terms added to the $\Gamma$ given the baseline order of $\omega = 3$.  With the presence of such extremely high degrees of non-linearity, the bias and variance of the estimate exponentially increases, contrary to our initial expectations. \\ 
+Our test of CF robustness across varying degrees of linearity in the response surface, on the other hand, reveals that the CF is relatively stable across non-linear situations, but breaks down in situations with extremely low linearity. Figure (\ref{figure:sixb}) and Table (\ref{table:twob}) demonstrates this, and we observe the bias and variance of the estimates dramatically increase when the degree of linearity is `low' (\textit{i} = 8). In this case, we have a total of 156 high-dimensional interaction terms added to the $\Gamma$ given the baseline order of $\omega = 3$.  With the presence of such extremely high degrees of non-linearity, the bias and variance of the estimate exponentially increases, contrary to our initial expectations. \\ 
 
-The analysis of model resilience across imbalanced treatment and control group size behaves as initially predicted: figure (6-c) and table (2-c) show bias and RMSE is minimized at a 50/50 split between control and treatment. An interesting result is that with significant differences in group size, the CF performs better when we have a 10/90 split treatment-control than when there is a 90/10 split. Observing very few treatment cases yields more favorable results than observing very few control group cases, perhaps as it yields more conservatives estimates of the treatment effect. We also note that in situations with such extreme imbalance in group sizes, it may be challenging to estimate heterogeneous treatment effects for the lack of data points we can estimate adequate counterfactuals on. Figure (6-d) and table (2-d) also shows similar results as modifying the propensity score, since the failure of the overlap condition forces some individuals to have 0\% change of receiving treatment, and thus creates and mismatch in the treatment-control group size. As expected, the violation of the overlap assumption does not significantly worsen CF performance, although there is some increase in bias, RMSE, and the interval length can be noted. \\ 
+The analysis of model resilience across imbalanced treatment and control group size behaves as initially predicted: figure (\ref{figure:sixc}) and table (\ref{table:twoc}) show bias and RMSE is minimized at a 50/50 split between control and treatment. An interesting result is that with significant differences in group size, the CF performs better when we have a 10/90 split treatment-control than when there is a 90/10 split. Observing very few treatment cases yields more favorable results than observing very few control group cases, perhaps as it yields more conservatives estimates of the treatment effect. We also note that in situations with such extreme imbalance in group sizes, it may be challenging to estimate heterogeneous treatment effects for the lack of data points we can estimate adequate counterfactuals on. Figure (\ref{figure:sixd}) and table (\ref{table:twod}) also shows similar results as modifying the propensity score, since the failure of the overlap condition forces some individuals to have 0\% change of receiving treatment, and thus creates and mismatch in the treatment-control group size. As expected, the violation of the overlap assumption does not significantly worsen CF performance, although there is some increase in bias, RMSE, and the interval length can be noted. \\ 
 
-Testing increasing degrees of treatment effect heterogeneity in the model yields promising results for the CF:  performance is significantly improved in models with some degree of heterogeneity compared to completely homogeneous models. As figure (6-e) and table (2-e) suggest, bias and RMSE increase slightly with degrees of heterogeneity greater than 2 (there are more than 2 features that drive treatment effect heterogeneity in the model), yet the change is minute. We see that CF is best fit to assess heterogeneous models and is robust to increasing sources of heterogeneity. \\ 
+Testing increasing degrees of treatment effect heterogeneity in the model yields promising results for the CF:  performance is significantly improved in models with some degree of heterogeneity compared to completely homogeneous models. As figure (\ref{figure:sixe}) and table (\ref{table:twoe}) suggest, bias and RMSE increase slightly with degrees of heterogeneity greater than 2 (there are more than 2 features that drive treatment effect heterogeneity in the model), yet the change is minute. We see that CF is best fit to assess heterogeneous models and is robust to increasing sources of heterogeneity. \\ 
 
-Finally, we also find that the CF produces stable estimates across variations in the tuning parameter. Figure (6-f) and table (2-f) show that the change in bias and RMSE of the estimates across increasing \textit{n\_estimator} is small, although the interval length decays. We note that the baseline of 1000 trees in the CF in fact yields the result with the highest bias and RMSE but the smallest interval length among the parameter values, reflecting a bias-variance trade off. In future analyses, it may be worth to explore whether this result changes with greater sample sizes. \\
+Finally, we also find that the CF produces stable estimates across variations in the tuning parameter. Figure (\ref{figure:sixf}) and table (\ref{table:twof}) show that the change in bias and RMSE of the estimates across increasing \textit{n\_estimator} is small, although the interval length decays. We note that the baseline of 1000 trees in the CF in fact yields the result with the highest bias and RMSE but the smallest interval length among the parameter values, reflecting a bias-variance trade off. In future analyses, it may be worth to explore whether this result changes with greater sample sizes. \\
 
 We thus find that CF performs best in relatively linear response surfaces with some degree of treatment effect heterogeneity. Overall performance is rather stable across different tuning parameters as well as DGP characteristics, allowing CF estimates to be reliable in many economic applications. It is promising that the CF reaches asymptotic results and shows excellent coverage even with smaller sample sizes, given the cost of acquiring large and thorough datasets. Moreover, we also note that the model parameters of the welfare GSS data in section 2 are in alignment with the condition under which CF yields stable results. This implies that the CATE estimates obtained in the earlier section are likely to be reasonable estimates. 
 
@@ -516,7 +515,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 \centering
 \vspace{0.5cm}
 \begin{subtable}{\textwidth}
-\caption{Sample Size} 
+\caption{\label{table:twoa}Sample Size} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{N} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Int. Length}&\textbf{Relative Int. Length}&\textbf{Coverage}\\
@@ -533,7 +532,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 
 \begin{subtable}{\textwidth}
 \vspace{0.5cm}
-\caption{Linearity} 
+\caption{\label{table:twob}Linearity} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{i} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
@@ -552,7 +551,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 
 \begin{subtable}{\textwidth}
 \vspace{0.5cm}
-\caption{Propensity Score} 
+\caption{\label{table:twoc}Propensity Score} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{p} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
@@ -569,7 +568,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 
 \begin{subtable}{\textwidth}
 \vspace{0.5cm}
-\caption{Overlap} 
+\caption{\label{table:twod}Overlap} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{overlap} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
@@ -584,7 +583,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 
 \begin{subtable}{\textwidth}
 \vspace{0.5cm}
-\caption{Degree of Heterogeneity} 
+\caption{\label{table:twoe}Degree of Heterogeneity} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{j} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
@@ -603,7 +602,7 @@ We thus find that CF performs best in relatively linear response surfaces with s
 
 \begin{subtable}{\textwidth}
 \vspace{0.5cm}
-\caption{Number of Estimators} 
+\caption{\label{table:twof}Number of Estimators} 
 \resizebox*{\textwidth}{!}{
 \begin{tabular}{l|ccccccccc}
             \textbf{Num\_Estimator} &\textbf{True ATE}&\textbf{Estimated ATE}&\textbf{Absolute Bias}&\textbf{Relative Bias}&\textbf{RMSE}&\textbf{Relative RMSE}&\textbf{Relative Int. Length}&\textbf{Int. Length}&\textbf{Coverage}\\
@@ -643,7 +642,7 @@ This paper provides promising results on the performance and stability of the CF
 
 
 \begin{figure}[!htp]
-\caption{CATE Estimates by Covariate}
+\caption{\label{figure:one}CATE Estimates by Covariate}
 \resizebox*{\textwidth}{!}{
 	\centering
 	\begin{subfigure} [h] {0.45\linewidth}
@@ -683,19 +682,19 @@ This paper provides promising results on the performance and stability of the CF
 \end{figure} 
 
 \begin{figure}[!htp]
-\caption{Histogram of CATE Estimates}
+\caption{\label{figure:two}Histogram of CATE Estimates}
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/s1_catefreq.png}
 \end{figure} 
 
 \begin{figure}[!htp]
-\caption{Summary of SHAP Values of Covariate Importance}
+\caption{\label{figure:three}Summary of SHAP Values of Covariate Importance}
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/s1_shap.png}
 \end{figure} 
 
 \begin{figure}[!htp]
-\caption{Estimated vs. Actual CATE across Race Groups}
+\caption{\label{figure:four}Estimated vs. Actual CATE across Race Groups}
 	\centering
 	\begin{subfigure} [h] {0.49\linewidth}
 		\caption{\textbf{1000 Samples}}
@@ -710,7 +709,7 @@ This paper provides promising results on the performance and stability of the CF
 \end{figure} 
 
 \begin{figure}[!htp]
-\caption{Estimated vs. Actual CATE across Education Level}
+\caption{\label{figure:five}Estimated vs. Actual CATE across Education Level}
 	\centering
 	\begin{subfigure} [h] {0.49\linewidth}
 		\caption{\textbf{1000 Samples}}
@@ -728,22 +727,22 @@ This paper provides promising results on the performance and stability of the CF
 \caption{Relative Model Performance by Parameter Variation }
 	\centering
 	\begin{subfigure} [h] {\linewidth}
-		\caption{\textbf{Sample Size}}
+		\caption{\label{figure:sixa}\textbf{Sample Size}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_nsiz.png}
 	\end{subfigure}
 	\begin{subfigure} [h] {\linewidth}
 \vspace{0.5cm}
-		\caption{\textbf{Linearity}}
+		\caption{\label{figure:sixb}\textbf{Linearity}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_linear.png}
 	\end{subfigure}
 	\begin{subfigure} [h] {\linewidth}
 \vspace{0.5cm}
-		\caption{\textbf{Propensity Score}}
+		\caption{\label{figure:sixc}\textbf{Propensity Score}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_propen.png}
 	\end{subfigure}
 	\begin{subfigure} [h] {\linewidth}
 \vspace{0.5cm}
-		\caption{\textbf{Overlap}}
+		\caption{\label{figure:sixd}\textbf{Overlap}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_overlap.png}
 	\end{subfigure}
 \end{figure} 
@@ -751,18 +750,18 @@ This paper provides promising results on the performance and stability of the CF
 \begin{figure}
 \ContinuedFloat
 	\begin{subfigure} [!ht] {\linewidth}
-		\caption{\textbf{Degree of Heterogeneity}}
+		\caption{\label{figure:sixe}\textbf{Degree of Heterogeneity}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_hetero.png}
 	\end{subfigure}
 	\begin{subfigure} [!ht] {\linewidth}
 \vspace{0.5cm}
-		\caption{\textbf{Number of Estimators}}
+		\caption{\label{figure:sixf}\textbf{Number of Estimators}}
    	 	\includegraphics[width = \linewidth]{Graphs/s2_nestimator.png}
 	\end{subfigure}
 \end{figure} 
 
 \begin{figure}[!htp]
-\caption{CATE Estimates by Variation in Degrees of Heterogeneity}
+\caption{\label{figure:seven}CATE Estimates by Variation in Degrees of Heterogeneity}
 	\centering
 	\begin{subfigure} [h] {0.49\linewidth}
 		\caption{\textbf{\textit{j = 0} (Homogeneity)}}
@@ -797,7 +796,7 @@ This paper provides promising results on the performance and stability of the CF
 
 \begin{figure}[!ht]
 \renewcommand{\thefigure}{A1}
-\caption{CATE Estimates Obtained by BART}
+\caption{\label{figure:GK}CATE Estimates Obtained by BART}
 	\centering
    	 	\includegraphics[width = 0.6\linewidth]{Graphs/A_GK_cate.png} \\
 \footnotesize
