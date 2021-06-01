@@ -1,19 +1,19 @@
-\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
-\contentsline {section}{\numberline {2}Causal Forest Estimates of CATE in Welfare Dataset}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Discussion of data and motivation for research}{3}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Causal forests and model assumptions}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Results and analysis}{4}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Suggestions for further analysis}{6}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{6}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Baseline DGP specification}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Assessment of CF performance in Baseline DGP}{7}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}DGP parameter modification and expectations of CF performance}{7}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Sample size}{9}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Linearity in response surface}{9}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}Propensity score}{9}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Overlap}{9}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}Degree of treatment effect heterogeneity}{9}{subsubsection.3.3.5}%
-\contentsline {subsubsection}{\numberline {3.3.6}Number of estimators}{10}{subsubsection.3.3.6}%
-\contentsline {subsection}{\numberline {3.4}Results and discussion}{10}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Conclusion and Remarks}{13}{section.4}%
-\contentsline {section}{\numberline {A}References from Green and Kern (2012) }{20}{appendix.A}%
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {section}{\numberline {2}Causal Forest Estimates of CATE in Welfare Dataset}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Discussion of data and motivation for research}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Causal forests and model assumptions}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Results and analysis}{4}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Suggestions for further analysis}{6}{subsection.2.4}
+\contentsline {section}{\numberline {3}Testing Parameter Robustness of Causal Forest Estimates on Synthetic DGP}{6}{section.3}
+\contentsline {subsection}{\numberline {3.1}Baseline DGP specification}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Assessment of CF performance in Baseline DGP}{7}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}DGP parameter modification and expectations of CF performance}{8}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Sample size}{8}{subsubsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.2}Linearity in response surface}{9}{subsubsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.3}Propensity score}{9}{subsubsection.3.3.3}
+\contentsline {subsubsection}{\numberline {3.3.4}Overlap}{9}{subsubsection.3.3.4}
+\contentsline {subsubsection}{\numberline {3.3.5}Degree of treatment effect heterogeneity}{9}{subsubsection.3.3.5}
+\contentsline {subsubsection}{\numberline {3.3.6}Number of estimators}{9}{subsubsection.3.3.6}
+\contentsline {subsection}{\numberline {3.4}Results and discussion}{10}{subsection.3.4}
+\contentsline {section}{\numberline {4}Conclusion and Remarks}{13}{section.4}
+\contentsline {section}{\numberline {A}References from Green and Kern (2012) }{20}{appendix.A}

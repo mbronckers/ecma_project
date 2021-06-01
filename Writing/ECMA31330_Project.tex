@@ -87,7 +87,7 @@
     \begin{center}
         \vspace*{1cm}
         \LARGE
-        \textbf{PAPER TITLE Blah Blah\\ Estimating Reaction to Welfare\\ Using Causal Forests\\}
+        \textbf{Revisiting Reaction to Welfare:\\ Exploration of Causal Forest Methods\\ in Estimating Treatment Effect Heterogeneity and Parameter Robustness\\}
         \vspace{0.5cm}
         \Large
         ECMA 31330 Final Project \\ 
@@ -146,7 +146,7 @@ In section 2, we fit a CF model on the welfare data and compares our estimates
 against BART estimates of both the average treatment effect (ATE) and
 conditional average treatment effect (CATE) obtained by Green and Kern. Since
 empirical data offers no ground truth CATEs, we are confined to comparing the
-methods on interval length and RMSE. In section 3, we remedy this shortcoming
+methods qualitatively. In section 3, we remedy this shortcoming
 with an evaluation of the CF method applied to multiple DGPs that attempt to
 represent the empirical dataset. Using the ground truth ATE and CATEs of our
 DGPs, we assess the CF's performance under a variety of different DGP parameters
@@ -163,14 +163,14 @@ programs labeled as "welfare". Due to associations with racial connotations and
 poorly managed welfare programs, respondents were found much more likely to
 endorse government spending for "the poor" than for public
 "welfare"~\cite{rasinski1989}. The treatment indicator $T_i$ is $1$ if the
-survey question presented to the respondent frames the governmenting spending as
+survey question presented to the respondent frames the government spending as
 for the "poor" and $0$ if the survey question frames it as "welfare". The
 outcome variable $Y_i$ is $1$ if the respondent's answer supports government
 spending in response to the survey question and $0$ if the respondent's answer
 does not support it. \\
 
 Using BART, Green and Kern seek to estimate the extent to which the reaction to
-the question wording of "welfare" varies dependending on the respondent's
+the question wording of "welfare" varies depending on the respondent's
 background characteristics, including years of education, race, or political
 alignment. BART has been a popular choice for heterogeneous treatment effect
 modeling as it assumes no specification of the treatment effect, unlike
@@ -200,13 +200,13 @@ intervals~\cite{atheywager2019}. In the context of economic policy making, the
 presence of an asymptotic theory allows for hypothesis testing on treatment
 effects--aiding policy decision making. \\
 
-Causal forests are a specific form of generalized random forests (GRF), which
+CFs are a specific form of generalized random forests (GRF), which
 uses adaptive sample splitting criterion taking into account the MSE. To avoid
 overfitting and reduce bias in the estimates, we also ensure that the tree is
 'honest' - the subsample with which we grow a tree is disparate from the
 subsample with which we drop down and obtain predictions. Additionally, we also
-note that although causal forests uncover heterogeneous treatment effects with
-valid confidence intervals for statistical inference, it does not necessarily
+note that although CFs uncover heterogeneous treatment effects with
+valid confidence intervals for statistical inference, they does not necessarily
 address the affect of confounding due to the regularization on our trees. The
 terminal leaves of our tree are not homogenous across covariates for the sake of
 lowering variance and thus increasing precision, but with confounding within the
@@ -356,12 +356,13 @@ significant/insignificant with respect to the treatment effect.
 
 We selected the covariate of interest involved in treatment effect heterogeneity
 to be \textit{race} of the respondent, chosen from the important features based
-on our DGP specification. We chose the covariate unresponsible for treatment
+on our DGP specification. We chose the covariate not responsible for treatment
 effect heterogeneity in the sample to be years of \textit{education} received.
 For each covariate, we estimate the CATE across $10$ bins of the variable on a
 sample size of $N = 1000$ and $N = 30\,000$ to check for convergence of our
-estimates. Due to computational constraints, we only ran the estimation of CATEs
-on the simulated data once. \\ 
+estimates. These bins evenly divided the data based on the conditioned covariate value
+as the simulated covariates had no inherent meaning, and could only be divided numerically. 
+Due to computational constraints, we only ran the estimation of CATEs on the simulated data once. \\ 
 
 Figures (\ref{figure:four}) and (\ref{figure:five}) demonstrate the convergence of estimates to the true CATE as
 sample size increases. It is clear that the CATE estimates conditional on race
@@ -433,7 +434,7 @@ of treatment effect heterogeneity. \\
 \subsection{DGP parameter modification and expectations of CF performance}
 
 Based on the synthetic DGP above, we test the CF model for robustness by
-modifying the parameters. We then estimate the model \textit{K = 50} times for
+modifying the parameters. We then estimate the model \textit{K = 30} times for
 each parameter value in a range of different parameters. We consider the
 following dimensions for parameter tweaking: \textit{1) sample size, 2)
 non-linearity in covariates, 3) propensity score, 4) overlap, 5) degree of
@@ -539,11 +540,11 @@ worsen CF performance, although there is some increase in bias, RMSE, and the
 interval length can be noted. This is promising given that the assumption of
 overlap is made for other causal inference models that focus on treatment effect
 heterogeneity, meaning CF could have a relative advantage under scenarios in
-which overlap is violated. It is important to note that the violation of overlap
+which overlap is violated. Again, it is important to note that the violation of overlap
 was done by forcing half of the observations to have no treatment while the
-other half were assigned treatments probabilistically as per the baseline model;
-an interesting extension would be to see if CF breaks under a larger amount of
-overlap violation and how behavior changes under varying degrees of overlap
+other half were assigned treatments probabilistically as per the baseline model.
+An interesting extension would be looking into the performane of CF under a larger amount 
+of overlap violation and how behavior changes under varying degrees of overlap
 violation.\\ 
 
 Testing increasing degrees of treatment effect heterogeneity in the model yields
@@ -572,7 +573,7 @@ allowing CF estimates to be reliable in many economic applications. It is
 promising that the CF reaches asymptotic results and shows excellent coverage
 even with smaller sample sizes, given the cost of acquiring large and thorough
 datasets. Moreover, we also note that the model parameters of the welfare GSS
-data in section 1 are in alignment with the condition under which CF yields
+data in section 2 are in alignment with the condition under which CF yields
 stable results. For example, the welfare GSS data contained over 30,000
 observations with only 120 covariates. This implies that the CATE estimates
 obtained in the earlier section are likely to be reasonable estimates. 
